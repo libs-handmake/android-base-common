@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">common</string>
+    <string name="no_data">Not data yet!</string>
+    <string name="server_down">Server error, please try later</string>
+    <string name="check_your_internet">Unable to connect to the server, please check your internet connection</string>
+    <string name="error_occurred">An error occurred, please try again later</string>
+</resources>
