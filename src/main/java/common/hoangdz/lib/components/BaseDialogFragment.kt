@@ -68,8 +68,15 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(), BaseAndr
     open fun show(manager: FragmentManager) {
         val df = manager.findFragment(this) ?: this
         if (df is DialogFragment && !df.isAdded) {
-            super.show(manager, javaClass.simpleName)
+            show(manager, javaClass.simpleName)
         }
+    }
+
+    override fun show(manager: FragmentManager, tag: String?) {
+        val ft = manager.beginTransaction()
+        ft.setReorderingAllowed(true)
+        ft.add(this, tag)
+        ft.commitAllowingStateLoss()
     }
 
     override fun onDestroy() {

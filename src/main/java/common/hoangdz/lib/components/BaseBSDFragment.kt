@@ -68,9 +68,17 @@ abstract class BaseBSDFragment<VB : ViewBinding> : BottomSheetDialogFragment(),
     open fun show(manager: FragmentManager) {
         val bsdf = manager.findFragment(this) ?: this
         if (bsdf is BottomSheetDialogFragment && !bsdf.isAdded) {
-            super.show(manager, javaClass.simpleName)
+            show(manager, javaClass.simpleName)
         }
     }
+
+    override fun show(manager: FragmentManager, tag: String?) {
+        val ft = manager.beginTransaction()
+        ft.setReorderingAllowed(true)
+        ft.add(this, tag)
+        ft.commitAllowingStateLoss()
+    }
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
