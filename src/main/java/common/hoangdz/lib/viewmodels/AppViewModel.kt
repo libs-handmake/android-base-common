@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import common.hoangdz.lib.datasouce.Result
+import common.hoangdz.lib.datasouce.Source
 import common.hoangdz.lib.extensions.launchIO
 
 /**
@@ -20,27 +20,27 @@ open class AppViewModel(application: Application) : AndroidViewModel(application
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
-    protected val _errorMessage by lazy { MutableLiveData<Result.Failure>() }
-    val errorMessage: LiveData<Result.Failure>
+    protected val _errorMessage by lazy { MutableLiveData<Source.Failure>() }
+    val errorMessage: LiveData<Source.Failure>
         get() = _errorMessage
 
     fun <T> launchData(
         dataUpdate: MutableLiveData<T>? = null,
-        progressUpdate: MutableLiveData<Boolean> = _isLoading,
+        progressUpdate: MutableLiveData<Boolean>? = _isLoading,
         onSuccess: ((T) -> Unit)? = null,
-        onFailure: (Result.Failure) -> Unit = { _errorMessage.postValue(it) },
-        task: suspend () -> Result<T>
+        onFailure: (Source.Failure) -> Unit = { _errorMessage.postValue(it) },
+        task: suspend () -> Source<T>
     ) {
-        progressUpdate.postValue(true)
+        progressUpdate?.postValue(true)
         viewModelScope.launchIO {
             val result = task()
-            if (result is Result.Success<T>) {
+            if (result is Source.Success<T>) {
                 dataUpdate?.postValue(result.value)
                 onSuccess?.invoke(result.value)
-            } else if (result is Result.Failure) {
+            } else if (result is Source.Failure) {
                 onFailure(result)
             }
-            progressUpdate.postValue(false)
+            progressUpdate?.postValue(false)
         }
     }
 

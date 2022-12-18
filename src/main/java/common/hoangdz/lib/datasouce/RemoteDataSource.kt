@@ -36,29 +36,29 @@ abstract class RemoteDataSource<S> : DataSource {
             .create(type)
     }
 
-    override suspend fun <T> launchData(call: suspend () -> T): Result<T> {
+    override suspend fun <T> launchData(call: suspend () -> T): Source<T> {
         return try {
-            Result.Success(call.invoke())
+            Source.Success(call.invoke())
         } catch (throwable: Throwable) {
             when (throwable) {
                 is HttpException -> {
-                    Result.Failure(
+                    Source.Failure(
                         R.string.server_down,
-                        errorType = Result.ErrorType.SERVER
+                        errorType = Source.ErrorType.SERVER
                     )
                 }
 
                 is ConnectException, is UnknownHostException, is SocketTimeoutException -> {
-                    Result.Failure(
+                    Source.Failure(
                         R.string.check_your_internet,
-                        errorType = Result.ErrorType.ERROR_NET_WORK
+                        errorType = Source.ErrorType.ERROR_NET_WORK
                     )
                 }
 
                 else -> {
-                    Result.Failure(
+                    Source.Failure(
                         R.string.error_occurred,
-                        errorType = Result.ErrorType.OTHER
+                        errorType = Source.ErrorType.OTHER
                     )
                 }
             }

@@ -5,11 +5,11 @@ package common.hoangdz.lib.datasouce
  */
 open class LocalDataSource : DataSource {
 
-    override suspend fun <T> launchData(call: suspend () -> T): Result<T> {
+    override suspend fun <T> launchData(call: suspend () -> T): Source<T> {
         return try {
-            Result.Success(call.invoke())
+            Source.Success(call.invoke())
         } catch (e: Throwable) {
-            Result.Failure(errorType = Result.ErrorType.OTHER)
+            Source.Failure(errorType = Source.ErrorType.OTHER)
         }
     }
 
