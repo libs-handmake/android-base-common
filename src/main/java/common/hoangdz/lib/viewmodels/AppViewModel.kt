@@ -24,6 +24,7 @@ open class AppViewModel(application: Application) : AndroidViewModel(application
     val errorMessage: LiveData<Result.Failure>
         get() = _errorMessage
 
+
     fun <T> launchData(
         dataUpdate: MutableLiveData<T>? = null,
         onSuccess: ((T) -> Unit)? = null,
