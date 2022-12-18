@@ -24,14 +24,14 @@ open class AppViewModel(application: Application) : AndroidViewModel(application
     val errorMessage: LiveData<Result.Failure>
         get() = _errorMessage
 
-
     fun <T> launchData(
         dataUpdate: MutableLiveData<T>? = null,
+        progressUpdate: MutableLiveData<Boolean> = _isLoading,
         onSuccess: ((T) -> Unit)? = null,
         onFailure: (Result.Failure) -> Unit = { _errorMessage.postValue(it) },
         task: suspend () -> Result<T>
     ) {
-        _isLoading.postValue(true)
+        progressUpdate.postValue(true)
         viewModelScope.launchIO {
             val result = task()
             if (result is Result.Success<T>) {
@@ -40,7 +40,7 @@ open class AppViewModel(application: Application) : AndroidViewModel(application
             } else if (result is Result.Failure) {
                 onFailure(result)
             }
-            _isLoading.postValue(false)
+            progressUpdate.postValue(false)
         }
     }
 
