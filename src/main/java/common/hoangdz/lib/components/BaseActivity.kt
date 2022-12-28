@@ -41,6 +41,10 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseAndroid
 
     override fun VB.initView(savedInstanceState: Bundle?) {}
 
+    override fun onBackPress(): Boolean {
+        return true
+    }
+
     @CallSuper
     override fun onBackPressed() {
         for (fragment in supportFragmentManager.fragments) {

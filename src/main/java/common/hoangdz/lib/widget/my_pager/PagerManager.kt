@@ -27,7 +27,7 @@ class PagerManager(
 
     private val pageMap by lazy { hashMapOf<Fragment, Boolean>() }
 
-    private var currentPosition = 0
+     var currentPosition = 0
 
     fun openPage(position: Int) {
         if (position in fragmentList.indices) {

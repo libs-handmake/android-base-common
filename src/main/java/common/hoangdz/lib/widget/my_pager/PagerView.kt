@@ -33,6 +33,9 @@ class PagerView : FrameLayout {
 
     private val scope = CoroutineScope(Dispatchers.IO)
 
+    val selectedPage
+        get() = pagerManager?.currentPosition
+
     private fun setupWithBottomNavigation(
         bottomNav: BottomMenuNavigation
     ) {
