@@ -188,6 +188,10 @@ class MyCustomRecyclerView : FrameLayout {
             field = value
         }
 
+    fun scrollToPosition(position: Int) {
+        recyclerView.scrollToPosition(position)
+    }
+
     fun smoothScrollToPosition(position: Int) {
         recyclerView.smoothScrollToPosition(position)
     }
