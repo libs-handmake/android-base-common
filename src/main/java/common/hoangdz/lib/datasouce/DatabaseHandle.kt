@@ -15,7 +15,7 @@ abstract class DatabaseHandle<T : AppDataBase>(private val context: Context) {
     val database by lazy {
         val clazz =
             (this::class.java.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<T>
-        Room.databaseBuilder(context, clazz, databaseName)
+        Room.databaseBuilder(context, clazz, databaseName).build()
     }
 
 }
