@@ -34,3 +34,10 @@ fun formatDateLocale(date: Long): String? {
         DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, Locale.getDefault())
     return dateFormat.format(date)
 }
+
+fun Float.millisToMinuteAndSecond(): String {
+    val second = ((this / 1000) % 60).toLong().let { if (it < 10) "0$it" else "$it" }
+    val minutes = (this / 60_000L).toLong().let { if (it < 10) "0$it" else "$it" }
+
+    return "$minutes:$second"
+}
