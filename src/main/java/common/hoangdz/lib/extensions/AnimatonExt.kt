@@ -17,12 +17,19 @@ fun View.scaleXY(
     scale: Float,
     duration: Long,
     needToStartNow: Boolean = false,
+    onCreateAnimation: (ObjectAnimator.() -> Unit)? = null,
     onEnd: (() -> Unit)? = null
 ): AnimatorSet {
     val animatorX =
-        ObjectAnimator.ofFloat(this, "scaleX", scale).apply { setDuration(duration) }
+        ObjectAnimator.ofFloat(this, "scaleX", scale).apply {
+            setDuration(duration)
+            onCreateAnimation?.invoke(this)
+        }
     val animatorY =
-        ObjectAnimator.ofFloat(this, "scaleY", scale).apply { setDuration(duration) }
+        ObjectAnimator.ofFloat(this, "scaleY", scale).apply {
+            setDuration(duration)
+            onCreateAnimation?.invoke(this)
+        }
     return AnimatorSet().apply {
         play(animatorX).with(animatorY)
         this.addListener(object : AnimatorListenerAdapter() {

@@ -33,6 +33,10 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(), BaseAndr
         return 0
     }
 
+    protected open fun getDefaultDialogWidthPercent(): Float {
+        return .8f
+    }
+
     override fun onStart() {
         super.onStart()
         registerEventBusBy(needToSubscribeEventBus)
@@ -51,7 +55,7 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(), BaseAndr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.root.layoutParams.apply {
             val screenSize = context?.screenSize ?: return@apply
-            width = (screenSize.first * 0.8f).roundToInt()
+            width = (screenSize.first * getDefaultDialogWidthPercent()).roundToInt()
             height = getDefaultDialogHeight().takeIf { it > 0 } ?: WRAP_CONTENT
             binding.root.layoutParams = this
         }
