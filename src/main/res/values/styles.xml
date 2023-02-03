@@ -20,4 +20,5 @@
         <item name="android:windowExitAnimation">@anim/translate_right_side</item>
 
     </style>
+
 </resources>
