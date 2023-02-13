@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -82,6 +83,10 @@ abstract class BaseBSDFragment<VB : ViewBinding> : BottomSheetDialogFragment(),
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return (super.onCreateDialog(savedInstanceState) as BottomSheetDialog).apply {
+            setOnKeyListener { _, keyCode, _ ->
+                if (keyCode == KeyEvent.KEYCODE_BACK) return@setOnKeyListener !isCancelable
+                return@setOnKeyListener false
+            }
             val defaultHeight = getDefaultDialogHeight()
             this.setOnShowListener {
                 window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

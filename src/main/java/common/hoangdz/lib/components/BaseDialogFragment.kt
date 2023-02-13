@@ -1,11 +1,10 @@
 package common.hoangdz.lib.components
 
+import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.view.Window
 import androidx.annotation.CallSuper
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -20,6 +19,10 @@ import kotlin.math.roundToInt
  */
 
 abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(), BaseAndroidComponent<VB> {
+
+    companion object {
+        val instanceManager by lazy { hashMapOf<String, BaseDialogFragment<*>>() }
+    }
 
     override val binding by lazy { inflateViewBinding<VB>(layoutInflater) }
 
@@ -70,6 +73,8 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(), BaseAndr
 
     @CallSuper
     open fun show(manager: FragmentManager) {
+        if (instanceManager[this::class.java.name] != null) return
+        instanceManager[this::class.java.name] = this
         val df = manager.findFragment(this) ?: this
         if (df is DialogFragment && !df.isAdded) {
             show(manager, javaClass.simpleName)
@@ -81,6 +86,21 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(), BaseAndr
         ft.setReorderingAllowed(true)
         ft.add(this, tag)
         ft.commitAllowingStateLoss()
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.setCancelable(isCancelable)
+        dialog.setOnKeyListener { _, keyCode, _ ->
+            if (keyCode == KeyEvent.KEYCODE_BACK) return@setOnKeyListener !isCancelable
+            return@setOnKeyListener false
+        }
+        return dialog
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        instanceManager.remove(this::class.java.name)
+        super.onDismiss(dialog)
     }
 
     override fun onDestroy() {
