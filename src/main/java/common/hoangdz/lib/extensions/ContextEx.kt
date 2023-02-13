@@ -54,6 +54,8 @@ fun Context.getColorR(@ColorRes res: Int): Int {
     return ContextCompat.getColor(this, res)
 }
 
+fun Context.getColorHex(@ColorRes res: Int) = colorIntToHex(getColorR(res))
+
 fun Context.drawable(@DrawableRes res: Int): Drawable? {
     return ContextCompat.getDrawable(this, res)
 }
