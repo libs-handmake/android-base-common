@@ -9,6 +9,7 @@ plugins {
 }
 
 android {
+    namespace = "common.hoangdz.lib"
     compileSdk = Configs.TARGET_SDK
 
     defaultConfig {
@@ -42,11 +43,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = Configs.JAVA_TARGET
+        targetCompatibility = Configs.JAVA_TARGET
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = Configs.JVM_TARGET
     }
 
     publishing {

@@ -254,9 +254,11 @@ fun View.setOnLongClickHandle(handler: Handler, listener: () -> Unit) {
             MotionEvent.ACTION_DOWN -> {
                 listener.invoke()
             }
+
             MotionEvent.ACTION_CANCEL -> {
                 handler.removeCallbacksAndMessages(null)
             }
+
             MotionEvent.ACTION_UP -> {
                 handler.removeCallbacksAndMessages(null)
             }
@@ -399,7 +401,7 @@ fun View.clickWithScale(needToShowInterstitial: Boolean = false, onClick: (View)
             play(scaleXY(0.95f, 80L, false))
                 .before(scaleXY(1f, 80L, false))
             addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     onClick(this@clickWithScale)
                 }
