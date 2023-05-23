@@ -4,8 +4,8 @@ plugins {
     id(Plugins.ANDROID_LIBS)
     kotlin("android")
     id(Plugins.HILT)
-    id("kotlin-kapt")
     id("maven-publish")
+    id("kotlin-kapt")
 }
 
 android {
