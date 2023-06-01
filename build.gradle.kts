@@ -79,6 +79,7 @@ dependencies {
 
     //sdp
     implementation(Deps.SDP) { isTransitive = true }
+    implementation(Deps.SSP) { isTransitive = true }
 
     //Kotlin Android lifecycl
     implementation(Deps.LIFECYCLE_VM) { isTransitive = true }

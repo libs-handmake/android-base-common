@@ -20,4 +20,12 @@
         <attr name="color_selected" format="color" />
         <attr name="color_unselected" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="ToolBar">
+        <attr name="title" />
+        <attr name="android:gravity" />
+        <attr name="backIcon" format="reference" />
+        <attr name="tintColor" format="color" />
+        <attr name="title_text_size" format="dimension" />
+    </declare-styleable>
 </resources>

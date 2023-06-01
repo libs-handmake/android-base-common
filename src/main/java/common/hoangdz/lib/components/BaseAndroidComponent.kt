@@ -10,19 +10,22 @@ import androidx.viewbinding.ViewBinding
 
 interface BaseAndroidComponent<VB : ViewBinding> {
 
-    val binding:VB
+    val binding: VB
 
     val needToSubscribeEventBus: Boolean
 
-    fun init(savedInstanceState: Bundle?){
+    fun init(savedInstanceState: Bundle?) {
         binding.initView(savedInstanceState)
         binding.setupViewModel()
+        binding.initObservers()
         binding.initListener()
     }
 
     fun VB.initView(savedInstanceState: Bundle?)
 
     fun VB.initListener()
+
+    fun VB.initObservers() {}
 
     fun VB.setupViewModel()
 
