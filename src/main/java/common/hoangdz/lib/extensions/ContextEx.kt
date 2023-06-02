@@ -2,7 +2,11 @@ package common.hoangdz.lib.extensions
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.*
+import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.hardware.display.DisplayManager
@@ -12,10 +16,19 @@ import android.os.Build
 import android.os.Vibrator
 import android.util.DisplayMetrics
 import android.util.TypedValue
-import android.view.*
+import android.view.Display
+import android.view.LayoutInflater
+import android.view.View
+import android.view.Window
+import android.view.WindowInsets
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.annotation.*
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -283,6 +296,16 @@ fun BaseActivity<*>.exitFullScreenMode() {
         )
 }
 
+val Activity.statusBarHeightOld: Int
+    get() {
+        var result = 0
+        val resourceId: Int = resources.getIdentifier("status_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            result = resources.getDimensionPixelSize(resourceId)
+        }
+        return result
+    }
+
 val Activity.statusBarHeight: Int
     get() {
         val rectangle = Rect()
@@ -290,6 +313,25 @@ val Activity.statusBarHeight: Int
         val statusBarHeight: Int = rectangle.top
         val contentViewTop: Int = window.findViewById<View>(Window.ID_ANDROID_CONTENT).top
         return abs(contentViewTop - statusBarHeight)
+    }
+
+val Activity.safeArea: Rect
+    get() {
+        val safeInsetRect = Rect()
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            return safeInsetRect
+        }
+
+        val windowInsets: WindowInsets = window.decorView.rootWindowInsets
+            ?: return safeInsetRect
+
+        val displayCutout = windowInsets.displayCutout
+        if (displayCutout != null) {
+            safeInsetRect[displayCutout.safeInsetLeft, displayCutout.safeInsetTop, displayCutout.safeInsetRight] =
+                displayCutout.safeInsetBottom
+        }
+
+        return safeInsetRect
     }
 
 val Activity.navigationBarHeight: Int
