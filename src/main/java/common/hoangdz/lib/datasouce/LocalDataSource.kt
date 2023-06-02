@@ -15,5 +15,6 @@ open class LocalDataSource : DataSource {
         }
     }
 
+    class LocalDataSourceException:Exception("Error while handling data :)")
 
 }

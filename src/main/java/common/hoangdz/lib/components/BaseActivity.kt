@@ -2,8 +2,8 @@ package common.hoangdz.lib.components
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
@@ -33,6 +33,28 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseAndroid
         setContentView(binding.root)
         savedInstanceState?.let { removeAllDialogFragment() }
         init(savedInstanceState)
+        handleBackPressed()
+    }
+
+    private fun handleBackPressed() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (supportFragmentManager.backStackEntryCount > 0) {
+                    supportFragmentManager.popBackStack()
+                    return
+                }
+                for (fragment in supportFragmentManager.fragments) {
+                    if (fragment is BaseFragment<*>) {
+                        if (fragment.requestBackPressed()) {
+                            return
+                        }
+                    }
+                }
+                if (onBackPress()) {
+                    finish()
+                }
+            }
+        })
     }
 
     override fun VB.setupViewModel() {}
@@ -43,20 +65,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseAndroid
 
     override fun onBackPress(): Boolean {
         return true
-    }
-
-    @CallSuper
-    override fun onBackPressed() {
-        for (fragment in supportFragmentManager.fragments) {
-            if (fragment is BaseFragment<*>) {
-                if (fragment.requestBackPressed()) {
-                    return
-                }
-            }
-        }
-        if (onBackPress()) {
-            super.onBackPressed()
-        }
     }
 
     override fun onDestroy() {
