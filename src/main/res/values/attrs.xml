@@ -27,5 +27,6 @@
         <attr name="backIcon" format="reference" />
         <attr name="tintColor" format="color" />
         <attr name="title_text_size" format="dimension" />
+        <attr name="iconSize" />
     </declare-styleable>
 </resources>

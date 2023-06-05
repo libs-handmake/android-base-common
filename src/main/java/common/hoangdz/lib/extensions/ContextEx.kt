@@ -13,7 +13,9 @@ import android.hardware.display.DisplayManager
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
+import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.Display
@@ -345,3 +347,22 @@ val Activity.navigationBarHeight: Int
 
 val Context.screenSize
     get() = resources.displayMetrics.let { it.widthPixels to it.heightPixels }
+
+fun Context.createVibratorSupport(): Vibrator {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val manager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+        manager.defaultVibrator
+    } else {
+        @Suppress("DEPRECATION")
+        getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    }
+}
+
+fun Vibrator.vibrateSupport(millis: Long) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        vibrate(VibrationEffect.createOneShot(millis, VibrationEffect.DEFAULT_AMPLITUDE))
+    } else {
+        @Suppress("DEPRECATION")
+        vibrate(millis)
+    }
+}

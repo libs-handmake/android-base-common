@@ -123,6 +123,17 @@ fun View.rotateTo(toAngle: Float, duration: Long): ObjectAnimator {
     }
 }
 
+fun View.rotateYTo(toAngle: Float, duration: Long, onEnd: (() -> Unit)? = null): ObjectAnimator {
+    return ObjectAnimator.ofFloat(this, "rotationY", toAngle).apply {
+        this.duration = duration
+        addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                onEnd?.invoke()
+            }
+        })
+    }
+}
+
 fun View.backToOriginRotation(): AnimatorSet {
     post {
         this.pivotY = -measuredHeight / 50f

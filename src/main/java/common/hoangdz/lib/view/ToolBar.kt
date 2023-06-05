@@ -36,9 +36,16 @@ class ToolBar : BaseInflateCustomView<LayoutToolbarViewBinding> {
         applyAttrs(attrs)
     }
 
-    private val menuItemSize = context.dimenInt(com.intuit.sdp.R.dimen._32sdp)
-
     private val menuItemPadding = context.dimenInt(com.intuit.sdp.R.dimen._6sdp)
+
+    var iconSize = context.dimenInt(com.intuit.sdp.R.dimen._32sdp)
+        set(value) {
+            field = value
+            binding.imgBack.layoutParams.apply {
+                width = value
+                height = value
+            }
+        }
 
     private val menuItems by lazy { mutableListOf<MenuItem>() }
 
@@ -47,7 +54,7 @@ class ToolBar : BaseInflateCustomView<LayoutToolbarViewBinding> {
     fun addMenuItem(menuItem: MenuItem) {
         menuItems.add(menuItem)
         ImageView(context).apply {
-            layoutParams = LinearLayout.LayoutParams(menuItemSize, menuItemSize)
+            layoutParams = LinearLayout.LayoutParams(iconSize, iconSize)
             setPadding(menuItemPadding, menuItemPadding, menuItemPadding, menuItemPadding)
             onAvoidDoubleClick {
                 menuItem.action?.invoke()
@@ -149,6 +156,7 @@ class ToolBar : BaseInflateCustomView<LayoutToolbarViewBinding> {
             title = ta.getString(R.styleable.ToolBar_title) ?: ""
             titleAlignment = ta.getInt(R.styleable.ToolBar_android_gravity, Gravity.START)
             titleTextSize = ta.getDimension(R.styleable.ToolBar_title_text_size, titleTextSize)
+            iconSize = ta.getDimension(R.styleable.ToolBar_iconSize, iconSize * 1f).toInt()
         } finally {
             ta.recycle()
         }

@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import common.hoangdz.lib.R
 
 
 /**
@@ -18,20 +19,25 @@ fun FragmentManager.add(
     fragment: Fragment,
     isAddToBackStack: Boolean = true
 ) =
-    beginTransaction().replace(container.id, fragment, fragment.javaClass.name).apply {
+    beginTransaction().add(container.id, fragment, fragment.javaClass.name).apply {
+        setCustomAnimations(
+            R.anim.enter_from_right,
+            R.anim.exit_to_left,
+            R.anim.enter_from_left,
+            R.anim.exit_to_right
+        )
         if (isAddToBackStack)
             addToBackStack(fragment.javaClass.name)
     }.commit()
 
 fun Fragment.removeSelf() {
-    parentFragmentManager.popBackStack(javaClass.name, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-    parentFragmentManager.remove(parentFragmentManager.findFragment(this) ?: return)
+    parentFragmentManager.remove(this)
 }
 
-fun FragmentManager.remove(fragment: Fragment) = beginTransaction().remove(fragment).commitNow()
+fun FragmentManager.remove(fragment: Fragment) = beginTransaction().remove(fragment).commit()
 
 fun FragmentManager.remove(tag: String) {
-    beginTransaction().remove(findFragmentByTag(tag) ?: return).commitNow()
+    beginTransaction().remove(findFragmentByTag(tag) ?: return).commit()
 }
 
 fun FragmentManager.findFragment(fragment: Fragment) =
