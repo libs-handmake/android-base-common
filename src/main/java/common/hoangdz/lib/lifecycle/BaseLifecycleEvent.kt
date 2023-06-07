@@ -1,12 +1,20 @@
 package common.hoangdz.lib.lifecycle
 
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Lifecycle.Event.*
+import androidx.lifecycle.Lifecycle.Event.ON_ANY
+import androidx.lifecycle.Lifecycle.Event.ON_CREATE
+import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
+import androidx.lifecycle.Lifecycle.Event.ON_PAUSE
+import androidx.lifecycle.Lifecycle.Event.ON_RESUME
+import androidx.lifecycle.Lifecycle.Event.ON_START
+import androidx.lifecycle.Lifecycle.Event.ON_STOP
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 
 abstract class BaseLifecycleEvent : LifecycleEventObserver {
+    var currentState = ON_ANY
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+        currentState = event
         when (event) {
             ON_CREATE -> onCreate()
             ON_DESTROY -> onDestroy()
@@ -18,17 +26,17 @@ abstract class BaseLifecycleEvent : LifecycleEventObserver {
         }
     }
 
-    protected fun onAny() {
+    protected open fun onAny() {
 
     }
 
-    protected fun onStart() {
+    protected open fun onStart() {
     }
 
-    protected fun onPause() {
+    protected open fun onPause() {
     }
 
-    protected fun onResume() {
+    protected open fun onResume() {
     }
 
     protected fun onStop() {}

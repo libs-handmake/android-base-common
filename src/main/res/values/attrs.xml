@@ -10,6 +10,7 @@
         <attr name="rv_padding_horizontal" format="dimension" />
         <attr name="rv_padding" format="dimension" />
         <attr name="place_holder_text" format="string" />
+        <attr name="place_holder_text_color" format="color" />
         <attr name="rv_padding_vertical" format="dimension" />
         <attr name="rv_split_motion_events" format="boolean" />
         <attr name="useShimmer" format="boolean" />

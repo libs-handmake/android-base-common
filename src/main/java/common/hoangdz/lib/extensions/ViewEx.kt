@@ -393,7 +393,7 @@ val Int.dpInt
 val Int.dpFloat
     get() = CommonApp.instance?.let {
         it.dimenFloat(it.getResID<com.intuit.sdp.R.dimen>("_${this}sdp"))
-    } ?: 0
+    } ?: 0f
 
 fun View.clickWithScale(needToShowInterstitial: Boolean = false, onClick: (View) -> Unit) {
     this.setOnClickListener {

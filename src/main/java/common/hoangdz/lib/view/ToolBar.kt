@@ -51,6 +51,13 @@ class ToolBar : BaseInflateCustomView<LayoutToolbarViewBinding> {
 
     private val menuItemViews by lazy { mutableListOf<ImageView>() }
 
+    fun setToolbarContent(view: View) {
+        binding.tvTitle.gone()
+        binding.lnContent.visible()
+        binding.lnContent.removeAllViews()
+        binding.lnContent.addView(view)
+    }
+
     fun addMenuItem(menuItem: MenuItem) {
         menuItems.add(menuItem)
         ImageView(context).apply {

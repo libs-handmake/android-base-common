@@ -14,7 +14,15 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import common.hoangdz.lib.R
 import common.hoangdz.lib.databinding.LayoutPlaceholderRecyclerviewBinding
-import common.hoangdz.lib.extensions.*
+import common.hoangdz.lib.extensions.alphaAnimate
+import common.hoangdz.lib.extensions.clickNoAnim
+import common.hoangdz.lib.extensions.dpInt
+import common.hoangdz.lib.extensions.getColorR
+import common.hoangdz.lib.extensions.gone
+import common.hoangdz.lib.extensions.invisible
+import common.hoangdz.lib.extensions.layoutInflater
+import common.hoangdz.lib.extensions.visible
+import common.hoangdz.lib.extensions.visibleBy
 import common.hoangdz.lib.recyclerview.BaseRecyclerViewAdapter
 
 class MyCustomRecyclerView : FrameLayout {
@@ -86,6 +94,10 @@ class MyCustomRecyclerView : FrameLayout {
                     R.styleable.MyCustomRecyclerView_rv_clip_to_padding,
                     recyclerView.clipToPadding
                 )
+            placeHolderTextColor = ta.getColor(
+                R.styleable.MyCustomRecyclerView_place_holder_text_color,
+                placeHolderTextColor
+            )
         } finally {
             ta.recycle()
         }
@@ -121,6 +133,12 @@ class MyCustomRecyclerView : FrameLayout {
     var onPlaceholderStateChangeListener: PlaceHolderStateChangeListener? = null
 
     var useShimmer = false
+
+    var placeHolderTextColor = context.getColorR(R.color.white)
+        set(value) {
+            placeHolderBinding.tvPlaceHolder.setTextColor(value)
+            field = value
+        }
 
     var placeHolderText
         get() = placeHolderBinding.tvPlaceHolder.text

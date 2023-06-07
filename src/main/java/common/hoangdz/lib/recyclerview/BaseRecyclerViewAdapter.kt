@@ -104,11 +104,13 @@ abstract class BaseRecyclerViewAdapter<D>(protected val context: Context) :
     open fun replaceData(data: MutableList<D>) {
         hasDataBefore = true
         fun replace() {
-            this.dataList.clear()
-            this.dataList.addAll(data)
-            notifyDataSetChanged()
-            onDataChanges.forEach {
-                it.invoke(data, false)
+            synchronized(dataList){
+                this.dataList.clear()
+                this.dataList.addAll(data)
+                notifyDataSetChanged()
+                onDataChanges.forEach {
+                    it.invoke(data, false)
+                }
             }
         }
 
@@ -130,56 +132,72 @@ abstract class BaseRecyclerViewAdapter<D>(protected val context: Context) :
     }
 
     open fun removeAt(position: Int) {
-        dataList.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, dataList.size - position)
-        onDataChanges.forEach {
-            it.invoke(dataList, true)
+        synchronized(dataList){
+            if (position !in indices) return
+            dataList.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, dataList.size - position)
+            onDataChanges.forEach {
+                it.invoke(dataList, true)
+            }
         }
     }
 
     open fun remove(data: D) {
-        val index = findIndex { data == it }.takeIf { it > -1 } ?: return
-        dataList.removeAt(index)
-        notifyItemRemoved(index)
-        notifyItemRangeChanged(index, dataList.size - index)
-        onDataChanges.forEach {
-            it.invoke(dataList, true)
+        synchronized(dataList){
+            val index = findIndex { data == it }.takeIf { it > -1 } ?: return
+            dataList.removeAt(index)
+            notifyItemRemoved(index)
+            notifyItemRangeChanged(index, dataList.size - index)
+            onDataChanges.forEach {
+                it.invoke(dataList, true)
+            }
         }
     }
 
     open fun addData(data: D) {
-        hasDataBefore = true
-        dataList.add(data)
-        notifyItemInserted(dataList.lastIndex)
-        onDataChanges.forEach {
-            it.invoke(dataList, true)
+        synchronized(dataList){
+            hasDataBefore = true
+            dataList.add(data)
+            notifyItemInserted(dataList.lastIndex)
+            recyclerView?.smoothScrollToPosition(dataList.lastIndex)
+            onDataChanges.forEach {
+                it.invoke(dataList, true)
+            }
         }
     }
 
     open fun addData(position: Int, data: D) {
-        hasDataBefore = true
-        dataList.add(position, data)
-        notifyItemInserted(0)
-        notifyItemRangeChanged(1, dataList.size - 1)
-        onDataChanges.forEach {
-            it.invoke(dataList, true)
-        }
+       synchronized(dataList){
+           hasDataBefore = true
+           dataList.add(position, data)
+           notifyItemInserted(0)
+           notifyItemRangeChanged(1, dataList.size - 1)
+           onDataChanges.forEach {
+               it.invoke(dataList, true)
+           }
+       }
     }
 
     fun updateItem(data: D) {
-        val index = dataList.findIndex { it == data }.takeIf { it > -1 } ?: return
-        notifyItemChanged(index)
+        synchronized(dataList){
+            val index = dataList.findIndex { it == data }.takeIf { it > -1 } ?: return
+            notifyItemChanged(index)
+        }
     }
 
     open fun setItem(position: Int, data: D) {
-        if (position !in dataList.indices) return
-        dataList[position] = data
-        notifyItemChanged(position)
+        synchronized(dataList){
+            if (position !in dataList.indices) return
+            dataList[position] = data
+            notifyItemChanged(position)
+        }
     }
 
     open fun moveItem(from: Int, to: Int) {
-        Collections.swap(dataList, from, to)
-        this.notifyItemMoved(from, to)
+        synchronized(dataList){
+            Collections.swap(dataList, from, to)
+            this.notifyItemMoved(from, to)
+        }
     }
 }
