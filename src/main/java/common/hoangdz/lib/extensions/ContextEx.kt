@@ -7,6 +7,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.hardware.display.DisplayManager
@@ -16,6 +17,7 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.Display
@@ -26,6 +28,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
@@ -365,4 +368,36 @@ fun Vibrator.vibrateSupport(millis: Long) {
         @Suppress("DEPRECATION")
         vibrate(millis)
     }
+}
+
+fun AppCompatActivity.createPermissionLauncher(
+    onDenied: (() -> Unit)? = null,
+    onGrant: (() -> Unit)? = null
+) = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+    if (it)
+        onGrant?.invoke()
+    else
+        onDenied?.invoke()
+}
+
+fun Fragment.createPermissionLauncher(
+    onDenied: (() -> Unit)? = null,
+    onGrant: (() -> Unit)? = null
+) = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+    if (it)
+        onGrant?.invoke()
+    else
+        onDenied?.invoke()
+}
+
+fun Context.checkPermission(permission: String) = ContextCompat.checkSelfPermission(
+    this,
+    permission
+) == PackageManager.PERMISSION_GRANTED
+
+fun Context.openAppSetting() {
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+    val uri = Uri.fromParts("package", packageName, null)
+    intent.data = uri
+    startActivity(intent)
 }
