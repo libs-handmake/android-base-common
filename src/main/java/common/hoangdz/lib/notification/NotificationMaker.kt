@@ -1,5 +1,6 @@
 package common.hoangdz.lib.notification
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -15,6 +16,10 @@ class NotificationMaker constructor(
     private val channelID: String,
     private val channelName: String = channelID
 ) {
+
+    companion object {
+        const val DEFAULT_ID = 101
+    }
 
     constructor(
         context: Context,
@@ -49,13 +54,13 @@ class NotificationMaker constructor(
         }
     }
 
-    fun makeNotification(
+    fun createNotification(
         title: String,
         content: String,
-        onNotificationBuilder: NotificationCompat.Builder.() -> Unit
-    ) {
+        onNotificationBuilder: (NotificationCompat.Builder.() -> Unit)? = null
+    ): Notification {
         val builder = NotificationCompat.Builder(context, channelID)
-        builder.setContentTitle(title)
+        return builder.setContentTitle(title)
             .setContentText(content)
             .setSmallIcon(smallIcon)
             .setContentIntent(
@@ -65,7 +70,26 @@ class NotificationMaker constructor(
                     context.packageManager.getLaunchIntentForPackage(context.packageName),
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
-            ).apply(onNotificationBuilder)
-        notificationManager.notify(101, builder.build())
+            ).apply {
+                onNotificationBuilder?.invoke(this)
+            }.build()
     }
+
+    fun showNotification(
+        title: String,
+        content: String,
+        notificationID: Int = DEFAULT_ID,
+        onNotificationBuilder: (NotificationCompat.Builder.() -> Unit)? = null
+    ) {
+        notificationManager.notify(
+            notificationID,
+            createNotification(title, content, onNotificationBuilder)
+        )
+    }
+
+    fun clearNotification(notificationID: Int = DEFAULT_ID) {
+        notificationManager.cancel(notificationID)
+    }
+
+    fun clearAllNotifications() = notificationManager.cancelAll()
 }
