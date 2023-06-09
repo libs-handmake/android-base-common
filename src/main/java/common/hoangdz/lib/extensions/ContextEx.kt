@@ -254,7 +254,9 @@ fun View.dimenInt(@DimenRes dimen: Int) = resources.getDimensionPixelSize(dimen)
 val Context.layoutInflater: LayoutInflater
     get() = LayoutInflater.from(this)
 
-fun Context.linkAppStore() {
+fun Context.linkAppStore() = "http://play.google.com/store/apps/details?id=${this.packageName}"
+
+fun Context.goToAppStore() {
     val uri: Uri = Uri.parse("market://details?id=${this.packageName}")
     val goToMarket = Intent(Intent.ACTION_VIEW, uri)
     goToMarket.addFlags(
@@ -268,7 +270,7 @@ fun Context.linkAppStore() {
         this.startActivity(
             Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("http://play.google.com/store/apps/details?id=${this.packageName}")
+                Uri.parse(linkAppStore())
             )
         )
     }
@@ -400,4 +402,15 @@ fun Context.openAppSetting() {
     val uri = Uri.fromParts("package", packageName, null)
     intent.data = uri
     startActivity(intent)
+}
+
+fun Context.shareText(content: String) {
+    val sendIntent: Intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, content)
+        type = "text/plain"
+    }
+
+    val shareIntent = Intent.createChooser(sendIntent, null)
+    startActivity(shareIntent)
 }
