@@ -28,6 +28,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
@@ -276,6 +277,13 @@ fun Context.goToAppStore() {
     }
 }
 
+fun Context.goToSettingNetwork() {
+    try {
+        startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+    } catch (ignored: ActivityNotFoundException) {
+    }
+}
+
 fun BaseActivity<*>.makeFullScreen() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -396,6 +404,28 @@ fun Context.checkPermission(permission: String) = ContextCompat.checkSelfPermiss
     this,
     permission
 ) == PackageManager.PERMISSION_GRANTED
+
+fun ActivityResultLauncher<String>.launchPermissionIfNeeded(
+    fragment: Fragment,
+    permission: String
+) {
+    if (!fragment.shouldShowRequestPermissionRationale(permission)) {
+        launch(permission)
+    } else {
+        fragment.context?.openAppSetting()
+    }
+}
+
+fun ActivityResultLauncher<String>.launchPermissionIfNeeded(
+    activity: Activity,
+    permission: String
+) {
+    if (!activity.shouldShowRequestPermissionRationale(permission)) {
+        launch(permission)
+    } else {
+        activity.openAppSetting()
+    }
+}
 
 fun Context.openAppSetting() {
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)

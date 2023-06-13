@@ -1,5 +1,6 @@
 package common.hoangdz.lib.notification
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,6 +10,7 @@ import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import common.hoangdz.lib.extensions.checkPermission
 
 class NotificationMaker constructor(
     private val context: Context,
@@ -81,6 +83,7 @@ class NotificationMaker constructor(
         notificationID: Int = DEFAULT_ID,
         onNotificationBuilder: (NotificationCompat.Builder.() -> Unit)? = null
     ) {
+        if (!context.checkPermission(Manifest.permission.POST_NOTIFICATIONS)) return
         notificationManager.notify(
             notificationID,
             createNotification(title, content, onNotificationBuilder)
