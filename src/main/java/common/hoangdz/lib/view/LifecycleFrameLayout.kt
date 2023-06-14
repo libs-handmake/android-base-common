@@ -33,8 +33,9 @@ class LifecycleFrameLayout : FrameLayout, LifecycleOwner {
     }
 
     override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
         registry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        registry.currentState = Lifecycle.State.DESTROYED
+        super.onDetachedFromWindow()
     }
 
     override fun onAttachedToWindow() {

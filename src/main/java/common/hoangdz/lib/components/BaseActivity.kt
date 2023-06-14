@@ -36,20 +36,25 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseAndroid
         handleBackPressed()
     }
 
+    protected open fun handleFragmentBackPressed(): Boolean {
+        supportFragmentManager.fragments.lastOrNull()?.let { fragment ->
+            if (fragment is BaseFragment<*>) {
+                if (fragment.requestBackPressed()) {
+                    return true
+                }
+            }
+        }
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+            return true
+        }
+        return false
+    }
+
     private fun handleBackPressed() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                supportFragmentManager.fragments.lastOrNull()?.let { fragment ->
-                    if (fragment is BaseFragment<*>) {
-                        if (fragment.requestBackPressed()) {
-                            return
-                        }
-                    }
-                }
-                if (supportFragmentManager.backStackEntryCount > 0) {
-                    supportFragmentManager.popBackStack()
-                    return
-                }
+                if (handleFragmentBackPressed()) return
                 if (onBackPress()) {
                     finish()
                 }
