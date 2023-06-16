@@ -45,9 +45,8 @@ class LifecycleFrameLayout : FrameLayout, LifecycleOwner {
 
     private val registry by lazy { LifecycleRegistry(this) }
 
-    override fun getLifecycle(): Lifecycle {
-        return registry
-    }
+    override val lifecycle: Lifecycle
+        get() = registry
 
 
 }

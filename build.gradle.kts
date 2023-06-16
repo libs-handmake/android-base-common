@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+import compose_config.composeImplementations
+
 plugins {
     id(Plugins.ANDROID_LIBS)
     kotlin("android")
@@ -31,6 +33,7 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding = true
+        compose = true
     }
 
     buildTypes {
@@ -55,6 +58,10 @@ android {
             withSourcesJar()
             withJavadocJar()
         }
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = PluginsVer.COMPOSE_COMPILER
     }
 }
 
@@ -106,6 +113,8 @@ dependencies {
     implementation(Deps.ROOM_RUNTIME)
     implementation(Deps.ROOM_KTX)
     kapt(Deps.ROOM_COMPILER)
+
+    composeImplementations()
 }
 
 kapt {
