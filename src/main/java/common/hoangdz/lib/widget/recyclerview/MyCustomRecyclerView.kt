@@ -181,6 +181,9 @@ class MyCustomRecyclerView : FrameLayout {
         recyclerView.addOnItemTouchListener(listener)
     }
 
+    override fun setOnScrollChangeListener(l: OnScrollChangeListener?) {
+        recyclerView.setOnScrollChangeListener(l)
+    }
 
     var adapter: BaseRecyclerViewAdapter<*>? = null
         set(value) {

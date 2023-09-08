@@ -8,13 +8,13 @@ open class LocalDataSource : DataSource {
     override suspend fun <T> launchData(call: suspend () -> T): Source<T> {
         return try {
             val res = call.invoke()
-            res?.let { Source.Success(call.invoke()) }
+            res?.let { Source.Success(res) }
                 ?: Source.Failure(errorType = Source.ErrorType.OTHER)
         } catch (e: Throwable) {
             Source.Failure(errorType = Source.ErrorType.OTHER)
         }
     }
 
-    class LocalDataSourceException:Exception("Error while handling data :)")
+    class LocalDataSourceException : Exception("Error while handling data :)")
 
 }

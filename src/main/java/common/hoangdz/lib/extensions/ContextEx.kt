@@ -444,3 +444,13 @@ fun Context.shareText(content: String) {
     val shareIntent = Intent.createChooser(sendIntent, null)
     startActivity(shareIntent)
 }
+
+fun Context.openFilePicker(
+    mimeType: String,
+    requestFileLauncher: ActivityResultLauncher<Intent>,
+    title: String = "Choose a file"
+) {
+    val chooseFile = Intent(Intent.ACTION_GET_CONTENT)
+    chooseFile.type = mimeType
+    requestFileLauncher.launch(Intent.createChooser(chooseFile, title))
+}
