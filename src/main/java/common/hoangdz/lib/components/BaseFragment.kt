@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import common.hoangdz.lib.extensions.inflateViewBinding
 import common.hoangdz.lib.extensions.registerEventBusBy
 import common.hoangdz.lib.extensions.unRegisterEventBus
 
@@ -14,7 +13,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseAndroidComponent
 
     override val needToSubscribeEventBus = false
 
-    override val binding: VB by lazy { inflateViewBinding(layoutInflater) }
+    override val binding: VB by lazy { getViewBinding() }
 
     override fun onStart() {
         super.onStart()

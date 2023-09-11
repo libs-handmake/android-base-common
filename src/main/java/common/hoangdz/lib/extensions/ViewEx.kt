@@ -26,7 +26,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.widget.ImageViewCompat
-import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
@@ -34,7 +33,6 @@ import com.google.android.material.snackbar.Snackbar
 import common.hoangdz.lib.CommonApp
 import common.hoangdz.lib.R
 import java.lang.reflect.Field
-import java.lang.reflect.ParameterizedType
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.schedule
@@ -313,24 +311,6 @@ fun View.doOnViewDrawnRepeat(removeCallbackBy: (() -> Boolean) = { true }, onDra
 
 fun ImageView.tintImage(color: Int) {
     setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
-}
-
-@Keep
-fun <VB : ViewBinding> Any.inflateViewBinding(
-    inflater: LayoutInflater,
-    viewGroup: ViewGroup? = null,
-    isAttachToRoot: Boolean = false,
-    genericArgumentIndex: Int = 0
-): VB {
-    val clazz =
-        (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[genericArgumentIndex] as Class<VB>
-    return clazz.getMethod(
-        "inflate",
-        LayoutInflater::class.java,
-        ViewGroup::class.java,
-        Boolean::class.java
-    )
-        .invoke(null, inflater, viewGroup, isAttachToRoot) as VB
 }
 
 fun View.toBitMap(): Bitmap? {

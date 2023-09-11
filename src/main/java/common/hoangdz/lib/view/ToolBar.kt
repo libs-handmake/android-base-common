@@ -17,6 +17,7 @@ import common.hoangdz.lib.extensions.dimenFloat
 import common.hoangdz.lib.extensions.dimenInt
 import common.hoangdz.lib.extensions.doOnViewDrawnRepeat
 import common.hoangdz.lib.extensions.gone
+import common.hoangdz.lib.extensions.layoutInflater
 import common.hoangdz.lib.extensions.onAvoidDoubleClick
 import common.hoangdz.lib.extensions.setTint
 import common.hoangdz.lib.extensions.visible
@@ -191,5 +192,9 @@ class ToolBar : BaseInflateCustomView<LayoutToolbarViewBinding> {
         val menuIndex: Int,
         val menuItem: MenuItem
     )
+
+    override fun getViewBinding(): LayoutToolbarViewBinding {
+        return LayoutToolbarViewBinding.inflate(context.layoutInflater, this, true)
+    }
 
 }

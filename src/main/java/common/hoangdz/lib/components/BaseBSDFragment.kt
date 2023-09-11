@@ -17,7 +17,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import common.hoangdz.lib.R
 import common.hoangdz.lib.extensions.findFragment
-import common.hoangdz.lib.extensions.inflateViewBinding
 import common.hoangdz.lib.extensions.registerEventBusBy
 import common.hoangdz.lib.extensions.unRegisterEventBus
 import common.hoangdz.lib.listener.SimpleBottomSheetCallbackListener
@@ -30,7 +29,7 @@ import common.hoangdz.lib.listener.SimpleBottomSheetCallbackListener
 abstract class BaseBSDFragment<VB : ViewBinding> : BottomSheetDialogFragment(),
     BaseAndroidComponent<VB> {
 
-    override val binding by lazy { inflateViewBinding<VB>(layoutInflater) }
+    override val binding by lazy { getViewBinding() }
 
     override val needToSubscribeEventBus = false
 

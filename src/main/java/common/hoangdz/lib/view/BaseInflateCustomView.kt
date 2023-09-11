@@ -5,7 +5,9 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.viewbinding.ViewBinding
-import common.hoangdz.lib.extensions.*
+import common.hoangdz.lib.extensions.doOnViewDrawn
+import common.hoangdz.lib.extensions.registerEventBusBy
+import common.hoangdz.lib.extensions.unRegisterEventBus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -17,8 +19,10 @@ abstract class BaseInflateCustomView<VB : ViewBinding> : FrameLayout {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     protected val binding by lazy {
-        inflateViewBinding<VB>(context.layoutInflater, this, true)
+        getViewBinding()
     }
+
+    abstract fun getViewBinding(): VB
 
     protected var viewScope: CoroutineScope? = null
 

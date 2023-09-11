@@ -7,7 +7,6 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.viewbinding.ViewBinding
-import common.hoangdz.lib.extensions.inflateViewBinding
 import common.hoangdz.lib.extensions.registerEventBusBy
 import common.hoangdz.lib.extensions.remove
 import common.hoangdz.lib.extensions.unRegisterEventBus
@@ -15,7 +14,7 @@ import common.hoangdz.lib.extensions.unRegisterEventBus
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseAndroidComponent<VB> {
 
-    override val binding by lazy { inflateViewBinding<VB>(layoutInflater) }
+    override val binding by lazy { getViewBinding() }
 
     override val needToSubscribeEventBus = false
 

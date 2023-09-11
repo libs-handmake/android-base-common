@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.util.*
 
-fun <T> MutableLiveData<MutableList<T>>.addNewItems(item: T) {
+fun <T> MutableLiveData<MutableList<T>>.addNewItem(item: T) {
     val oldValue = this.value ?: mutableListOf()
     oldValue.add(item)
     this.postValue(oldValue)
@@ -49,7 +49,7 @@ fun <T> MutableLiveData<MutableList<T>>.postUpdateItem(item: T, position: Int) {
 }
 
 
-fun <T> MutableLiveData<MutableList<T>>.addNewItems(items: List<T>) {
+fun <T> MutableLiveData<MutableList<T>>.addNewItem(items: List<T>) {
     val oldValue = this.value ?: mutableListOf()
     oldValue.addAll(items)
     this.value = oldValue

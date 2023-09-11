@@ -34,4 +34,6 @@ interface BaseAndroidComponent<VB : ViewBinding> {
     fun updateContentHeightAds(height: Int) {
     }
 
+    fun getViewBinding(): VB
+
 }

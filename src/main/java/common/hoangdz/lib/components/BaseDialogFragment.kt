@@ -24,7 +24,7 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(), BaseAndr
         val instanceManager by lazy { hashMapOf<String, BaseDialogFragment<*>>() }
     }
 
-    override val binding by lazy { inflateViewBinding<VB>(layoutInflater) }
+    override val binding by lazy { getViewBinding() }
 
     override fun isCancelable() = true
 
