@@ -1,7 +1,12 @@
 package common.hoangdz.lib.extensions
 
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -20,3 +25,13 @@ fun CoroutineScope.launchIO(block: suspend CoroutineScope.() -> Unit) =
 
 fun CoroutineScope.launchMain(block: suspend CoroutineScope.() -> Unit) =
     launch(Dispatchers.Main, block = block)
+
+
+fun LifecycleOwner.launchWhen(state: Lifecycle.State, block: suspend CoroutineScope.() -> Unit) {
+    lifecycleScope.launch {
+        repeatOnLifecycle(state) {
+            block()
+            this@launch.cancel()
+        }
+    }
+}
