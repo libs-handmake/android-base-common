@@ -9,3 +9,7 @@ import android.util.Log
 fun Any.logError(message: Any?) {
     Log.e("logError_" + javaClass.simpleName, "$message")
 }
+
+fun logError(message: Any?) {
+    Log.e("Hoangdz logError", "$message")
+}

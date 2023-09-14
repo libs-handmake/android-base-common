@@ -65,8 +65,7 @@ fun Context.dpToPx(dp: Float) = TypedValue.applyDimension(
 fun Context.toastMsg(msg: Int) =
     Toast.makeText(this, this.getString(msg), Toast.LENGTH_SHORT).show()
 
-fun Context.toastMsg(msg: String) =
-    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+fun Context.toastMsg(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 
 @ColorInt
 fun Context.getColorR(@ColorRes res: Int): Int {
@@ -136,8 +135,7 @@ fun AppCompatActivity.hideSoftKeyboard() {
     ) as InputMethodManager
     if (inputMethodManager.isAcceptingText) {
         inputMethodManager.hideSoftInputFromWindow(
-            currentFocus!!.windowToken,
-            0
+            currentFocus!!.windowToken, 0
         )
     }
 }
@@ -149,8 +147,7 @@ fun Fragment.hideSoftKeyboard() {
     ) as InputMethodManager?
     if (inputMethodManager?.isAcceptingText == true) {
         inputMethodManager.hideSoftInputFromWindow(
-            activity?.currentFocus?.windowToken ?: return,
-            0
+            activity?.currentFocus?.windowToken ?: return, 0
         )
     }
 }
@@ -261,17 +258,14 @@ fun Context.goToAppStore() {
     val uri: Uri = Uri.parse("market://details?id=${this.packageName}")
     val goToMarket = Intent(Intent.ACTION_VIEW, uri)
     goToMarket.addFlags(
-        Intent.FLAG_ACTIVITY_NO_HISTORY or
-                Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-                Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+        Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
     )
     try {
         this.startActivity(goToMarket)
     } catch (e: ActivityNotFoundException) {
         this.startActivity(
             Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse(linkAppStore())
+                Intent.ACTION_VIEW, Uri.parse(linkAppStore())
             )
         )
     }
@@ -292,23 +286,20 @@ fun BaseActivity<*>.makeFullScreen() {
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
-    } else
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+    } else window.addFlags(
+        WindowManager.LayoutParams.FLAG_FULLSCREEN
+    )
 }
 
 fun BaseActivity<*>.exitFullScreenMode() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         WindowCompat.setDecorFitsSystemWindows(window, true)
         WindowInsetsControllerCompat(
-            window,
-            binding.root
+            window, binding.root
         ).show(WindowInsetsCompat.Type.systemBars())
-    } else
-        window.clearFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+    } else window.clearFlags(
+        WindowManager.LayoutParams.FLAG_FULLSCREEN
+    )
 }
 
 val Activity.statusBarHeightOld: Int
@@ -337,8 +328,7 @@ val Activity.safeArea: Rect
             return safeInsetRect
         }
 
-        val windowInsets: WindowInsets = window.decorView.rootWindowInsets
-            ?: return safeInsetRect
+        val windowInsets: WindowInsets = window.decorView.rootWindowInsets ?: return safeInsetRect
 
         val displayCutout = windowInsets.displayCutout
         if (displayCutout != null) {
@@ -366,8 +356,7 @@ fun Context.createVibratorSupport(): Vibrator {
         val manager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
         manager.defaultVibrator
     } else {
-        @Suppress("DEPRECATION")
-        getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        @Suppress("DEPRECATION") getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 }
 
@@ -375,39 +364,30 @@ fun Vibrator.vibrateSupport(millis: Long) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         vibrate(VibrationEffect.createOneShot(millis, VibrationEffect.DEFAULT_AMPLITUDE))
     } else {
-        @Suppress("DEPRECATION")
-        vibrate(millis)
+        @Suppress("DEPRECATION") vibrate(millis)
     }
 }
 
 fun AppCompatActivity.createPermissionLauncher(
-    onDenied: (() -> Unit)? = null,
-    onGrant: (() -> Unit)? = null
+    onDenied: (() -> Unit)? = null, onGrant: (() -> Unit)? = null
 ) = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-    if (it)
-        onGrant?.invoke()
-    else
-        onDenied?.invoke()
+    if (it) onGrant?.invoke()
+    else onDenied?.invoke()
 }
 
 fun Fragment.createPermissionLauncher(
-    onDenied: (() -> Unit)? = null,
-    onGrant: (() -> Unit)? = null
+    onDenied: (() -> Unit)? = null, onGrant: (() -> Unit)? = null
 ) = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-    if (it)
-        onGrant?.invoke()
-    else
-        onDenied?.invoke()
+    if (it) onGrant?.invoke()
+    else onDenied?.invoke()
 }
 
 fun Context.checkPermission(permission: String) = ContextCompat.checkSelfPermission(
-    this,
-    permission
+    this, permission
 ) == PackageManager.PERMISSION_GRANTED
 
 fun ActivityResultLauncher<String>.launchPermissionIfNeeded(
-    fragment: Fragment,
-    permission: String
+    fragment: Fragment, permission: String
 ) {
     if (!fragment.shouldShowRequestPermissionRationale(permission)) {
         launch(permission)
@@ -417,8 +397,7 @@ fun ActivityResultLauncher<String>.launchPermissionIfNeeded(
 }
 
 fun ActivityResultLauncher<String>.launchPermissionIfNeeded(
-    activity: Activity,
-    permission: String
+    activity: Activity, permission: String
 ) {
     if (!activity.shouldShowRequestPermissionRationale(permission)) {
         launch(permission)
@@ -453,4 +432,10 @@ fun Context.openFilePicker(
     val chooseFile = Intent(Intent.ACTION_GET_CONTENT)
     chooseFile.type = mimeType
     requestFileLauncher.launch(Intent.createChooser(chooseFile, title))
+}
+
+fun Context.startForegroundServiceSupport(intent: Intent) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        startForegroundService(intent)
+    } else startService(intent)
 }
