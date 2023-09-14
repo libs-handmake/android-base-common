@@ -17,8 +17,7 @@ import kotlinx.coroutines.withContext
 
 suspend fun <T> runMain(run: suspend () -> T) = withContext(Dispatchers.Main) { run() }
 
-suspend fun <T> runIO(run: suspend CoroutineScope.() -> T) =
-    withContext(Dispatchers.IO) { run() }
+suspend fun <T> runIO(run: suspend CoroutineScope.() -> T) = withContext(Dispatchers.IO) { run() }
 
 fun CoroutineScope.launchIO(block: suspend CoroutineScope.() -> Unit) =
     launch(Dispatchers.IO, block = block)
