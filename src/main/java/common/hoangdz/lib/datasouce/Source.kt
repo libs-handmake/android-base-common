@@ -12,7 +12,7 @@ sealed class Source<out T> {
     class Failure(
         @StringRes val mgsRes: Int? = null,
         val mgsStr: String = "",
-        val errorType: ErrorType
+        val errorType: ErrorType = ErrorType.OTHER
     ) : Source<Nothing>()
 
     enum class ErrorType {

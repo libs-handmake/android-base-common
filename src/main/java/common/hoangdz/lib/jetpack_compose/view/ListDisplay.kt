@@ -35,7 +35,6 @@ fun <T> ListDisplay(
     onData: @Composable (List<T>) -> Unit = {},
 ) {
     val data by dataState.collectWhenResume()
-    logError("draw list ${data.value?.size}")
     when (data.state) {
         DataResult.DataState.LOADING, DataResult.DataState.IDLE -> onLoading(data)
         DataResult.DataState.LOADED -> {

@@ -7,7 +7,7 @@ import android.util.Log
  */
 
 fun Any.logError(message: Any?) {
-    Log.e("logError_" + javaClass.simpleName, "$message")
+    Log.e("Hoangdz logError" + javaClass.simpleName, "$message")
 }
 
 fun logError(message: Any?) {

@@ -82,3 +82,19 @@ fun <T> List<T>.equal(another: List<T>, onEqual: (T, T) -> Boolean): Boolean {
     }
     return true
 }
+
+fun <T> MutableList<T>.insertAds(
+    startIndex: Int, repeatInterval: Int, maxAds: Int, itemBuilder: () -> T
+) {
+    if (maxAds == 0) return
+    var startIndex = startIndex
+    if (size > startIndex) {
+        add(startIndex, itemBuilder())
+    }
+    startIndex += repeatInterval
+    var adsCount = 0
+    while (++adsCount < maxAds && startIndex < size) {
+        add(startIndex, itemBuilder())
+        startIndex += repeatInterval
+    }
+}

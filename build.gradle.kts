@@ -5,9 +5,9 @@ import compose_config.composeImplementations
 plugins {
     id(Plugins.ANDROID_LIBS)
     kotlin("android")
+    id("kotlin-kapt")
     id(Plugins.HILT)
     id("maven-publish")
-    id("kotlin-kapt")
 }
 
 android {
