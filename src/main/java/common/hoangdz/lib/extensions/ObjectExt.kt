@@ -3,6 +3,7 @@ package common.hoangdz.lib.extensions
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
+import common.hoangdz.lib.viewmodels.DataResult
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -98,3 +99,6 @@ fun <T> MutableList<T>.insertAds(
         startIndex += repeatInterval
     }
 }
+
+fun  DataResult.DataState.availableToLoad() =
+    this != DataResult.DataState.LOADED && this != DataResult.DataState.LOADING

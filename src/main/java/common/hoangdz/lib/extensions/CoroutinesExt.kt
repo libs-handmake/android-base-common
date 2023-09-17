@@ -26,11 +26,16 @@ fun CoroutineScope.launchMain(block: suspend CoroutineScope.() -> Unit) =
     launch(Dispatchers.Main, block = block)
 
 
-fun LifecycleOwner.launchWhen(state: Lifecycle.State, block: suspend CoroutineScope.() -> Unit) {
+fun LifecycleOwner.launchWhen(state: Lifecycle.State, block: suspend CoroutineScope.() -> Unit) =
     lifecycleScope.launch {
+        var executed = false
         repeatOnLifecycle(state) {
+            if (executed) {
+                this@launch.cancel()
+                return@repeatOnLifecycle
+            }
+            executed = true
             block()
             this@launch.cancel()
         }
     }
-}
