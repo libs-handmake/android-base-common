@@ -1,15 +1,19 @@
 package common.hoangdz.lib.extensions
 
 import android.content.Context
+import android.os.Build
 import android.provider.ContactsContract
 import androidx.core.text.HtmlCompat
 import com.google.gson.Gson
 import common.hoangdz.lib.Constant
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.net.URLDecoder
+import java.net.URLEncoder
 import java.text.Normalizer
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import java.util.regex.Pattern
 
 private val escapedRegex = """\\([\\;,":])""".toRegex()
@@ -17,15 +21,12 @@ private val escapedRegex = """\\([\\;,":])""".toRegex()
 fun String.normalText(): String {
     val nfdNormalizedString: String = Normalizer.normalize(this, Normalizer.Form.NFD)
     val pattern: Pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+")
-    return pattern.matcher(nfdNormalizedString).replaceAll("").uppercase(Locale.getDefault())
-        .trim()
+    return pattern.matcher(nfdNormalizedString).replaceAll("").uppercase(Locale.getDefault()).trim()
 }
 
 
 fun StringBuilder.appendIfNotNullOrBlank(
-    prefix: String = "",
-    value: String?,
-    suffix: String = ""
+    prefix: String = "", value: String?, suffix: String = ""
 ): StringBuilder {
     if (value.isNullOrBlank().not()) {
         append(prefix)
@@ -176,4 +177,16 @@ fun String.appendWithBaseUrl(url: String): String {
     if (url.isEmpty()) return this
     if (!startsWith("http")) return url.appendUrlPath(this)
     return this
+}
+
+fun String.urlEncoded() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    URLEncoder.encode(this, Charsets.UTF_8)
+} else {
+    @Suppress("DEPRECATION") URLEncoder.encode(this)
+}
+
+fun String.urlDecoded() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    URLDecoder.decode(this, Charsets.UTF_8)
+} else {
+    @Suppress("DEPRECATION") URLDecoder.decode(this)
 }

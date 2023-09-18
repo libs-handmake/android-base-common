@@ -6,16 +6,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun Navigation(vararg screenNavigators: ScreenNavigator) {
+fun Navigation(vararg screenNavigators: ScreenNavConfig<*>) {
     if (screenNavigators.isEmpty()) return
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = screenNavigators.first().route) {
+    NavHost(
+        navController = navController, startDestination = screenNavigators.first().routePattern
+    ) {
         for (nav in screenNavigators) {
-            composable(route = nav.route, arguments = nav.argument) {
-                nav.screenContent?.invoke(
-                    ScreenConfigs(
-                        navController,
-                        nav.argument
+            composable(route = nav.routePattern, enterTransition = {
+                nav.enterTransition()
+            }, exitTransition = { nav.exitTransition() }, arguments = nav.getArgumentPattern()) {
+                nav.BuildContent(
+                    screenNavConfig = ScreenConfigs(
+                        navController, it.arguments
                     )
                 )
             }

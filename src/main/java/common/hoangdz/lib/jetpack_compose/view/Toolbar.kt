@@ -50,17 +50,13 @@ fun Toolbar(
         backIcon?.RenderMenu(Modifier.onGloballyPositioned {
             sizeLeft = it.size.width
         })
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .apply {
-                    if (textStyle.textAlign == TextAlign.Center)
-                        padding(
-                            start = max(sizeRight - sizeLeft, 0).toComposeDP(),
-                            end = max(sizeLeft - sizeRight, 0).toComposeDP()
-                        )
-                }
-        ) {
+        Box(modifier = Modifier.weight(1f).run {
+            if (textStyle.textAlign == TextAlign.Center) padding(
+                start = max(sizeRight - sizeLeft, 0).toComposeDP(),
+                end = max(sizeLeft - sizeRight, 0).toComposeDP()
+            )
+            else this
+        }) {
             title.takeIf { it.isNotEmpty() }?.let { text ->
                 Text(
                     text = text,
@@ -80,7 +76,11 @@ fun Toolbar(
     }
 }
 
-data class MenuItem(@DrawableRes val icon: Int, val clickListener: (() -> Unit)? = null) {
+data class MenuItem(
+    @DrawableRes val icon: Int? = null,
+    val itemView: (@Composable () -> Unit)? = null,
+    val clickListener: (() -> Unit)? = null
+) {
 
     @Composable
     fun RenderMenu(modifier: Modifier = Modifier) {
@@ -91,14 +91,17 @@ data class MenuItem(@DrawableRes val icon: Int, val clickListener: (() -> Unit)?
                 .clickable {
                     clickListener?.invoke()
                 }) {
-                Image(
-                    painter = painterResource(id = icon),
-                    colorFilter = ColorFilter.tint(Color.Black),
-                    contentDescription = "Back icon",
-                    modifier = Modifier
-                        .width(28.sdp)
-                        .padding(6.sdp)
-                )
+                icon?.let {
+                    Image(
+                        painter = painterResource(id = icon),
+                        colorFilter = ColorFilter.tint(Color.Black),
+                        contentDescription = "Back icon",
+                        modifier = Modifier
+                            .width(28.sdp)
+                            .padding(6.sdp)
+                    )
+                } ?: itemView?.invoke()
+
             }
         }
     }
