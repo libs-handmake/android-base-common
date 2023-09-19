@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
@@ -48,14 +50,16 @@ abstract class ScreenNavConfig<T> {
     abstract fun BuildContent(screenNavConfig: ScreenConfigs)
 
     open fun enterTransition(): EnterTransition {
-        return slideInHorizontally(TweenSpec(durationMillis = 400)) {
-            it / 2
-        }
+        val duration = 400
+        return slideInHorizontally(TweenSpec(duration)) {
+            it
+        } + fadeIn(TweenSpec(duration),.3f)
     }
 
     open fun exitTransition(): ExitTransition {
-        return slideOutHorizontally(TweenSpec(durationMillis = 400)) {
-            it / 2
-        }
+        val duration = 400
+        return slideOutHorizontally(TweenSpec(durationMillis = duration)) {
+            it
+        } + fadeOut(TweenSpec(duration),.3f)
     }
 }
