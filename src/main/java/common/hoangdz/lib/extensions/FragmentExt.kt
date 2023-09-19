@@ -20,12 +20,12 @@ fun FragmentManager.add(
     isAddToBackStack: Boolean = true
 ) =
     beginTransaction().add(container.id, fragment, fragment.javaClass.name).apply {
-        setCustomAnimations(
-            R.anim.enter_from_right,
-            R.anim.exit_to_left,
-            R.anim.enter_from_left,
-            R.anim.exit_to_right
-        )
+//        setCustomAnimations(
+//            R.anim.enter_from_right,
+//            R.anim.exit_to_left,
+//            R.anim.enter_from_left,
+//            R.anim.exit_to_right
+//        )
         if (isAddToBackStack)
             addToBackStack(fragment.javaClass.name)
     }.commit()
