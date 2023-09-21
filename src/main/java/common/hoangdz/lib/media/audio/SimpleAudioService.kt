@@ -39,12 +39,12 @@ internal class SimpleAudioService(
 
     override fun toggleWithSourceAsset(source: String, audioOptions: AudioOptions) {
         val rSource = source.replace(Constant.ASSET_FILE_PATH, "")
+        this.currentOptions = audioOptions
         if (this.source == rSource) {
             toggle()
             return
         }
         this.source = rSource
-        this.currentOptions = audioOptions
         sync {
             releaseMediaPlayer()
             _playState.value = PlayState.IDLE
@@ -152,6 +152,7 @@ internal class SimpleAudioService(
 
     override fun release() {
         sync {
+            source = null
             releaseMediaPlayer()
         }
     }

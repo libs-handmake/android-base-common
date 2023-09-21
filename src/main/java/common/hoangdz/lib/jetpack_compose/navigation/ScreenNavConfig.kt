@@ -50,14 +50,14 @@ abstract class ScreenNavConfig<T> {
     abstract fun BuildContent(screenNavConfig: ScreenConfigs)
 
     open fun enterTransition(): EnterTransition {
-        val duration = 300
+        val duration = 200
         return slideInHorizontally(TweenSpec(duration)) {
             it
         } + fadeIn(TweenSpec(duration),.3f)
     }
 
     open fun exitTransition(): ExitTransition {
-        val duration = 300
+        val duration = 200
         return slideOutHorizontally(TweenSpec(durationMillis = duration)) {
             it
         } + fadeOut(TweenSpec(duration),.3f)

@@ -10,10 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import common.hoangdz.lib.R
 import common.hoangdz.lib.extensions.logError
 import common.hoangdz.lib.jetpack_compose.exts.collectWhenResume
 import common.hoangdz.lib.viewmodels.DataResult
+import ir.kaaveh.sdpcompose.ssp
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
@@ -22,7 +24,11 @@ fun <T> ListDisplay(
     modifier: Modifier = Modifier,
     onPlaceHolder: @Composable (data: DataResult<List<T>>) -> Unit = {
         Box(Modifier.fillMaxSize()) {
-            Text(text = stringResource(id = R.string.no_data))
+            Text(
+                modifier = Modifier.align(Alignment.Center),
+                text = stringResource(id = R.string.no_data),
+                style = TextStyle(color = Color.Black, fontSize = 14.ssp)
+            )
         }
     },
     onLoading: @Composable (data: DataResult<List<T>>) -> Unit = {
@@ -35,6 +41,7 @@ fun <T> ListDisplay(
     onData: @Composable (List<T>) -> Unit = {},
 ) {
     val data by dataState.collectWhenResume()
+    logError(data.state)
     when (data.state) {
         DataResult.DataState.LOADING, DataResult.DataState.IDLE -> onLoading(data)
         DataResult.DataState.LOADED -> {
