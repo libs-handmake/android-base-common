@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import common.hoangdz.lib.R
@@ -45,7 +46,11 @@ fun Toolbar(
     var sizeRight by remember {
         mutableIntStateOf(0)
     }
-    val textStyle = onBuildTitleStyle(TextStyle(fontSize = 14.ssp, color = Color.Black))
+    val textStyle = onBuildTitleStyle(
+        TextStyle(
+            fontSize = 14.ssp, color = Color.Black, fontWeight = FontWeight.Bold
+        )
+    )
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         backIcon?.RenderMenu(Modifier.onGloballyPositioned {
             sizeLeft = it.size.width
@@ -86,11 +91,12 @@ data class MenuItem(
     fun RenderMenu(modifier: Modifier = Modifier) {
         Box(modifier) {
             Box(modifier = Modifier
-                .padding(6.sdp)
+                .padding(4.sdp)
                 .clip(RoundedCornerShape(6.sdp))
                 .clickable {
                     clickListener?.invoke()
-                }) {
+                }
+                .padding(4.sdp)) {
                 icon?.let {
                     Image(
                         painter = painterResource(id = icon),
