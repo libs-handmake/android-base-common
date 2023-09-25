@@ -1,6 +1,7 @@
 package common.hoangdz.lib.media.audio
 
 import android.content.Context
+import android.media.AudioManager
 import android.media.MediaPlayer
 import common.hoangdz.lib.Constant
 import common.hoangdz.lib.extensions.createVibratorSupport
@@ -24,6 +25,8 @@ internal class SimpleAudioService(
     override val playState by lazy { _playState.asStateFlow() }
 
     private val vibrationService by lazy { context.createVibratorSupport() }
+
+    private val audioManager by lazy { context.getSystemService(Context.AUDIO_SERVICE) as AudioManager }
 
     private var mediaPlayer: MediaPlayer? = null
 
@@ -67,6 +70,13 @@ internal class SimpleAudioService(
             kotlin.runCatching {
                 afd.close()
             }
+        }
+    }
+
+    override fun updateAudioOptions(audioOptions: AudioOptions) {
+        sync {
+            this.currentOptions = audioOptions
+            updateVolume()
         }
     }
 
@@ -138,6 +148,17 @@ internal class SimpleAudioService(
             _playState.value = PlayState.PLAYING
             vibrate()
             startTorch()
+            updateVolume()
+        }
+    }
+
+    private fun updateVolume() {
+        currentOptions?.let { options ->
+            val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                (maxVolume * ((options.adjustVolume.second).takeIf { !options.adjustVolume.first }
+                    ?: 0f)).toInt(),
+                0)
         }
     }
 

@@ -5,7 +5,10 @@ import kotlinx.coroutines.flow.StateFlow
 interface AudioService {
 
     val playState: StateFlow<PlayState>
+
     fun toggleWithSourceAsset(source: String, audioOptions: AudioOptions = AudioOptions())
+
+    fun updateAudioOptions(audioOptions: AudioOptions)
 
     fun toggle()
 
