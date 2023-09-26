@@ -10,6 +10,8 @@ interface AudioService {
 
     fun updateAudioOptions(audioOptions: AudioOptions)
 
+    fun updateVolume(volume: Pair<Boolean, Float>? = null)
+
     fun toggle()
 
     fun pause()

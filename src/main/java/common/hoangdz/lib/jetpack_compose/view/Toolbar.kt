@@ -83,6 +83,7 @@ fun Toolbar(
 
 data class MenuItem(
     @DrawableRes val icon: Int? = null,
+    val colorFilter: ColorFilter = ColorFilter.tint(Color.Black),
     val itemView: (@Composable () -> Unit)? = null,
     val clickListener: (() -> Unit)? = null
 ) {
@@ -100,7 +101,7 @@ data class MenuItem(
                 icon?.let {
                     Image(
                         painter = painterResource(id = icon),
-                        colorFilter = ColorFilter.tint(Color.Black),
+                        colorFilter = colorFilter,
                         contentDescription = "Back icon",
                         modifier = Modifier
                             .width(28.sdp)

@@ -152,12 +152,12 @@ internal class SimpleAudioService(
         }
     }
 
-    private fun updateVolume() {
+    override fun updateVolume(volume: Pair<Boolean, Float>?) {
         currentOptions?.let { options ->
             val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+            val volume = volume ?: options.adjustVolume
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-                (maxVolume * ((options.adjustVolume.second).takeIf { !options.adjustVolume.first }
-                    ?: 0f)).toInt(),
+                (maxVolume * ((volume.second).takeIf { !volume.first } ?: 0f)).toInt(),
                 0)
         }
     }
