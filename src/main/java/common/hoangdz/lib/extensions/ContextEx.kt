@@ -2,10 +2,12 @@ package common.hoangdz.lib.extensions
 
 import android.app.Activity
 import android.app.Dialog
+import android.app.LocaleManager
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
@@ -14,6 +16,7 @@ import android.hardware.display.DisplayManager
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
+import android.os.LocaleList
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -36,15 +39,18 @@ import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.os.LocaleListCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import common.hoangdz.lib.components.BaseActivity
 import dagger.hilt.android.EntryPointAccessors
+import java.util.Locale
 import kotlin.math.abs
 
 
@@ -439,4 +445,24 @@ fun Context.startForegroundServiceSupport(intent: Intent) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         startForegroundService(intent)
     } else startService(intent)
+}
+
+fun Context.setLocaleSupport(code: String) {
+    val locale = Locale(code)
+    Locale.setDefault(locale)
+    val tag = locale.toLanguageTag()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getSystemService(LocaleManager::class.java).applicationLocales =
+            LocaleList.forLanguageTags(tag)
+    } else {
+        AppCompatDelegate.setApplicationLocales(
+            LocaleListCompat.forLanguageTags(tag)
+        )
+    }
+}
+
+fun Context.getActivity(): AppCompatActivity? = when (this) {
+    is AppCompatActivity -> this
+    is ContextWrapper -> baseContext.getActivity()
+    else -> null
 }

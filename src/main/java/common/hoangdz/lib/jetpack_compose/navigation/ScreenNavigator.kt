@@ -10,6 +10,13 @@ open class ScreenNavigator(
 )
 
 data class ScreenConfigs(
-    val navController: NavHostController,
-    val argument: Bundle? = null
-)
+    val navController: NavHostController, val route: String, val argument: Bundle? = null
+) {
+    fun navigateAndReplace(route: String) {
+        navController.navigate(route) {
+            popUpTo(this@ScreenConfigs.route) {
+                inclusive = true
+            }
+        }
+    }
+}

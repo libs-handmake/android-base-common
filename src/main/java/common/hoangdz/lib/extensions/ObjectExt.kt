@@ -3,6 +3,8 @@ package common.hoangdz.lib.extensions
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
+import common.hoangdz.lib.utils.list.LooperIterator
+import common.hoangdz.lib.utils.list.SimpleLooperIterator
 import common.hoangdz.lib.viewmodels.DataResult
 import org.greenrobot.eventbus.EventBus
 
@@ -100,5 +102,9 @@ fun <T> MutableList<T>.insertAds(
     }
 }
 
-fun  DataResult.DataState.availableToLoad() =
+fun <T> List<T>.looperIterator(): LooperIterator<T> {
+    return SimpleLooperIterator(this)
+}
+
+fun DataResult.DataState.availableToLoad() =
     this != DataResult.DataState.LOADED && this != DataResult.DataState.LOADING

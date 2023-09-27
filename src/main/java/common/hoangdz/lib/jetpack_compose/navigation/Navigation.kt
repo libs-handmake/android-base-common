@@ -27,7 +27,7 @@ fun Navigation(
                 Box(modifier = modifier) {
                     nav.BuildContent(
                         screenNavConfig = ScreenConfigs(
-                            navController, it.arguments
+                            navController, it.destination.route ?: return@composable, it.arguments
                         )
                     )
                 }

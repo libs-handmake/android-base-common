@@ -6,7 +6,7 @@ import androidx.navigation.Navigator
 
 fun NavHostController.navigateAndReplace(
     route: String,
-    replacement: Boolean = false,
+    replacement: Boolean = true,
     navOptions: NavOptions? = null,
     navigatorExtras: Navigator.Extras? = null
 ) {
