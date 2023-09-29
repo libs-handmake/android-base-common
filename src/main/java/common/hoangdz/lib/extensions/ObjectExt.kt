@@ -106,5 +106,5 @@ fun <T> List<T>.looperIterator(): LooperIterator<T> {
     return SimpleLooperIterator(this)
 }
 
-fun DataResult.DataState.availableToLoad() =
-    this != DataResult.DataState.LOADED && this != DataResult.DataState.LOADING
+fun DataResult.DataState.availableToLoad(reloadable: Boolean = true) =
+    this != DataResult.DataState.LOADED && this != DataResult.DataState.LOADING && (reloadable || this != DataResult.DataState.ERROR)
