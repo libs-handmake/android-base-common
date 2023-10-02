@@ -7,3 +7,8 @@ import androidx.compose.ui.platform.LocalDensity
 fun Int.toComposeDP() = with(LocalDensity.current) {
     toDp()
 }
+
+@Composable
+fun Float.toComposeDP() = with(LocalDensity.current) {
+    toDp()
+}

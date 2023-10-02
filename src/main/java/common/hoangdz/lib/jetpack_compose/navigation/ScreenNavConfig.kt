@@ -1,5 +1,6 @@
 package common.hoangdz.lib.jetpack_compose.navigation
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -15,6 +16,8 @@ import common.hoangdz.lib.extensions.urlEncoded
 import java.util.regex.Pattern
 
 abstract class ScreenNavConfig<T> {
+
+    open fun onBackPressed(activity: Activity?, configs: ScreenConfigs): Boolean = false
 
     abstract val routePattern: String
 
@@ -53,13 +56,13 @@ abstract class ScreenNavConfig<T> {
         val duration = 200
         return slideInHorizontally(TweenSpec(duration)) {
             it
-        } + fadeIn(TweenSpec(duration),.3f)
+        } + fadeIn(TweenSpec(duration), .3f)
     }
 
     open fun exitTransition(): ExitTransition {
         val duration = 200
         return slideOutHorizontally(TweenSpec(durationMillis = duration)) {
             it
-        } + fadeOut(TweenSpec(duration),.3f)
+        } + fadeOut(TweenSpec(duration), .3f)
     }
 }
