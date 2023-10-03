@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.semantics.Role
-import common.hoangdz.lib.extensions.logError
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
@@ -73,7 +72,6 @@ fun Modifier.clickableWithDebounce(
         enabled, onClickLabel, role
     ) {
         if (System.currentTimeMillis() - lastClick < debounce || !enabled) return@clickable
-        logError("clicked ${System.currentTimeMillis() - lastClick}")
         lastClick = System.currentTimeMillis()
         onClick()
     }
@@ -96,7 +94,6 @@ fun Modifier.clickableWithDebounce(
         interactionSource, indication, enabled, onClickLabel, role
     ) {
         if (System.currentTimeMillis() - lastClick < debounce || !enabled) return@clickable
-        logError("clicked ${System.currentTimeMillis() - lastClick}")
         lastClick = System.currentTimeMillis()
         onClick()
     }

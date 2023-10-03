@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import common.hoangdz.lib.R
-import common.hoangdz.lib.extensions.logError
 import common.hoangdz.lib.jetpack_compose.exts.collectWhenResume
 import common.hoangdz.lib.viewmodels.DataResult
 import ir.kaaveh.sdpcompose.ssp
@@ -41,7 +40,6 @@ fun <T> ListDisplay(
     onData: @Composable (List<T>) -> Unit = {},
 ) {
     val data by dataState.collectWhenResume()
-    logError(data.state)
     when (data.state) {
         DataResult.DataState.LOADING, DataResult.DataState.IDLE -> onLoading(data)
         DataResult.DataState.LOADED -> {

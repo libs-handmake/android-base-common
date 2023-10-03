@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
+import android.widget.RemoteViews
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -48,12 +49,29 @@ class NotificationMaker constructor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationManager.createNotificationChannel(
                 NotificationChannel(
-                    channelID,
-                    channelName,
-                    priority
+                    channelID, channelName, priority
                 )
             )
         }
+    }
+
+    fun createNotification(
+        remoteViews: RemoteViews,
+        bigContent: RemoteViews = remoteViews,
+        onNotificationBuilder: (NotificationCompat.Builder.() -> Unit)? = null
+    ): Notification {
+        val builder = NotificationCompat.Builder(context, channelID)
+        return builder.setContent(remoteViews).setCustomBigContentView(bigContent)
+            .setSmallIcon(smallIcon).setContentIntent(
+                PendingIntent.getActivity(
+                    context,
+                    101,
+                    context.packageManager.getLaunchIntentForPackage(context.packageName),
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+            ).apply {
+                onNotificationBuilder?.invoke(this)
+            }.build()
     }
 
     fun createNotification(
@@ -62,9 +80,7 @@ class NotificationMaker constructor(
         onNotificationBuilder: (NotificationCompat.Builder.() -> Unit)? = null
     ): Notification {
         val builder = NotificationCompat.Builder(context, channelID)
-        return builder.setContentTitle(title)
-            .setContentText(content)
-            .setSmallIcon(smallIcon)
+        return builder.setContentTitle(title).setContentText(content).setSmallIcon(smallIcon)
             .setContentIntent(
                 PendingIntent.getActivity(
                     context,
@@ -85,8 +101,7 @@ class NotificationMaker constructor(
     ) {
         if (!context.checkPermission(Manifest.permission.POST_NOTIFICATIONS)) return
         notificationManager.notify(
-            notificationID,
-            createNotification(title, content, onNotificationBuilder)
+            notificationID, createNotification(title, content, onNotificationBuilder)
         )
     }
 
