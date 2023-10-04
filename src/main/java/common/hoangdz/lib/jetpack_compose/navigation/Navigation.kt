@@ -2,6 +2,7 @@ package common.hoangdz.lib.jetpack_compose.navigation
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -15,6 +16,8 @@ import common.hoangdz.lib.extensions.getActivity
 fun Navigation(
     modifier: Modifier = Modifier,
     vararg screenNavigators: ScreenNavConfig<*>,
+    backGround: @Composable () -> Unit = {},
+    foreGround: @Composable () -> Unit = {},
     onScreenRender: @Composable (navController: NavHostController) -> Unit = {}
 ) {
     if (screenNavigators.isEmpty()) return
@@ -33,6 +36,9 @@ fun Navigation(
                 )
                 val activity = LocalContext.current.getActivity()
                 Box(modifier = modifier) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        backGround()
+                    }
                     BackHandler {
                         if (nav.onBackPressed(activity, config)) return@BackHandler
                         if (!navController.popBackStack()) {
@@ -42,6 +48,9 @@ fun Navigation(
                     nav.BuildContent(
                         screenNavConfig = config
                     )
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        foreGround()
+                    }
                 }
             }
         }

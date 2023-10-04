@@ -175,14 +175,14 @@ fun Context.copyClipboard(text: String, label: String = "") {
 }
 
 
-fun Context.openLink(url: String, haveAnError: () -> Unit) {
+fun Context.openLink(url: String, haveAnError: (() -> Unit)? = null) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
         flags = flags or Intent.FLAG_ACTIVITY_NEW_TASK
     }
     try {
         startActivity(intent)
     } catch (e: Exception) {
-        haveAnError.invoke()
+        haveAnError?.invoke()
         e.printStackTrace()
     }
 }

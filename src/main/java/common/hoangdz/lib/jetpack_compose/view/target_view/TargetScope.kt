@@ -5,4 +5,6 @@ interface TargetScope {
     fun moveToNextTarget()
 
     fun skipAllTarget()
+
+    fun cancelTarget()
 }

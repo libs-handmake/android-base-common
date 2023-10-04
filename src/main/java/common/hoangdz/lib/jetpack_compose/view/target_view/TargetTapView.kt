@@ -27,12 +27,23 @@ import common.hoangdz.lib.jetpack_compose.exts.toComposeDP
 import kotlin.math.abs
 
 @Composable
-fun TargetTapView(vararg targetContent: TargetContent, onTargetClosed: (() -> Unit)? = null) {
+fun TargetTapView(
+    vararg targetContent: TargetContent,
+    skipWhenClickOutside: Boolean = false,
+    onTargetClicked: ((TargetContent) -> Unit)? = null,
+    onTargetClosed: (() -> Unit)? = null,
+    onTargetCancel: (() -> Unit)? = null
+) {
 
     val targetScope by remember {
-        mutableStateOf(InstanceTargetScope(*targetContent) {
-            onTargetClosed?.invoke()
-        })
+        mutableStateOf(
+            InstanceTargetScope(
+                *targetContent,
+                onTargetClicked = onTargetClicked,
+                onTargetClosed = onTargetClosed,
+                onTargetCancel = onTargetCancel
+            )
+        )
     }
     val targetAnim by targetScope.targetAnim.collectWhenResume()
     val animValue by animateFloatAsState(
@@ -48,7 +59,9 @@ fun TargetTapView(vararg targetContent: TargetContent, onTargetClosed: (() -> Un
     Box(Modifier
         .clickable(
             interactionSource = interactionSource, indication = null
-        ) {}
+        ) {
+            if (skipWhenClickOutside) targetScope.cancelTarget()
+        }
         .onGloballyPositioned {
             targetScope.reverseAnim()
         }) {
