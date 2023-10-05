@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import common.hoangdz.lib.R
+import common.hoangdz.lib.extensions.toastMsg
 
 
 object FeedbackSender {
@@ -23,6 +25,7 @@ object FeedbackSender {
             context.startActivity(i)
             true
         } catch (ex: ActivityNotFoundException) {
+            context.toastMsg(R.string.mail_client_not_found)
             false
         }
     }

@@ -1,7 +1,9 @@
 package common.hoangdz.lib.extensions
 
 import java.text.DateFormat
-import java.util.*
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 fun DateFormat.parseOrNull(date: String?): Date? {
     return try {
@@ -40,4 +42,9 @@ fun Float.millisToMinuteAndSecond(): String {
     val minutes = (this / 60_000L).toLong().let { if (it < 10) "0$it" else "$it" }
 
     return "$minutes:$second"
+}
+
+infix fun Long.areTheSameDay(other: Long): Boolean {
+    val format = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+    return format.formatOrNull(other) == format.formatOrNull(this)
 }

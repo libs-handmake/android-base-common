@@ -17,7 +17,8 @@ import java.util.regex.Pattern
 
 abstract class ScreenNavConfig<T> {
 
-    open fun onBackPressed(activity: Activity?, configs: ScreenConfigs): Boolean = false
+    open fun onBackPressed(activity: Activity?, configs: ScreenConfigs): Boolean =
+        configs.onBackPressed()
 
     abstract val routePattern: String
 

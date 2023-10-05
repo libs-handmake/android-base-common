@@ -80,9 +80,9 @@ internal class SimpleAudioService(
         }
     }
 
-    private fun startTorch() {
+    override fun startTorch(flashOptions: AudioOptions.FlashLightOptions?) {
         stopTorch()
-        val flashLightOptions = currentOptions?.flashLightOptions ?: return
+        val flashLightOptions = flashOptions ?: currentOptions?.flashLightOptions ?: return
         if (!flashLightOptions.enableBy()) return
         flashLightJob = scope.launchIO {
             for ((index, d) in flashLightOptions.pattern.withIndex()) {
@@ -94,7 +94,7 @@ internal class SimpleAudioService(
                 }
                 delay(d)
             }
-            startTorch()
+            startTorch(flashOptions)
         }
     }
 

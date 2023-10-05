@@ -12,7 +12,7 @@ open class ScreenNavigator(
 data class ScreenConfigs(
     val navController: NavHostController, val route: String, val argument: Bundle? = null
 ) {
-    var onBackPressed: (() -> Unit)? = null
+    var onBackPressed: (() -> Boolean) = { false }
     fun navigateAndReplace(route: String) {
         navController.navigate(route) {
             popUpTo(this@ScreenConfigs.route) {

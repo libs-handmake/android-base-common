@@ -394,22 +394,41 @@ fun Context.checkPermission(permission: String) = ContextCompat.checkSelfPermiss
 ) == PackageManager.PERMISSION_GRANTED
 
 fun ActivityResultLauncher<String>.launchPermissionIfNeeded(
-    fragment: Fragment, permission: String
+    fragment: Fragment, permission: String, onPermissionRequest: ((Boolean) -> Boolean) = { true }
 ) {
     if (!fragment.shouldShowRequestPermissionRationale(permission)) {
         launch(permission)
+        onPermissionRequest(true)
     } else {
-        fragment.context?.openAppSetting()
+        if (onPermissionRequest(false)) fragment.context?.openAppSetting()
+    }
+}
+
+fun Context.openNotificationSetting(channelID: String? = null) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val settingsIntent: Intent =
+            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(Settings.EXTRA_APP_PACKAGE, packageName).apply {
+                    channelID?.let { putExtra(Settings.EXTRA_CHANNEL_ID, it) }
+                }
+        try {
+            startActivity(settingsIntent)
+        } catch (e: ActivityNotFoundException) {
+            openAppSetting()
+        }
+    } else {
+        openAppSetting()
     }
 }
 
 fun ActivityResultLauncher<String>.launchPermissionIfNeeded(
-    activity: Activity, permission: String
+    activity: Activity, permission: String, onPermissionRequest: ((Boolean) -> Boolean) = { true }
 ) {
     if (!activity.shouldShowRequestPermissionRationale(permission)) {
         launch(permission)
+        onPermissionRequest(true)
     } else {
-        activity.openAppSetting()
+        if (onPermissionRequest(false)) activity.openAppSetting()
     }
 }
 

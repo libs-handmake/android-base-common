@@ -21,4 +21,6 @@ interface AudioService {
     fun stop()
 
     fun release()
+
+    fun startTorch(flashOptions: AudioOptions.FlashLightOptions? = null)
 }
