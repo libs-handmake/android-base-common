@@ -59,7 +59,7 @@ fun Modifier.invisible(): Modifier {
 
 @Composable
 fun Modifier.clickableWithDebounce(
-    debounce: Long = 200L,
+    debounce: Long = 500L,
     enabled: Boolean = true,
     onClickLabel: String? = null,
     role: Role? = null,
@@ -79,7 +79,7 @@ fun Modifier.clickableWithDebounce(
 
 @Composable
 fun Modifier.clickableWithDebounce(
-    debounce: Long = 200L,
+    debounce: Long = 500L,
     interactionSource: MutableInteractionSource,
     indication: Indication?,
     enabled: Boolean = true,

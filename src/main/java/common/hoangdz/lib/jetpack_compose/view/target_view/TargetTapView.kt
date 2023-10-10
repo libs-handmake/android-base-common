@@ -3,7 +3,6 @@ package common.hoangdz.lib.jetpack_compose.view.target_view
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +21,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.layout.onGloballyPositioned
+import common.hoangdz.lib.jetpack_compose.exts.clickableWithDebounce
 import common.hoangdz.lib.jetpack_compose.exts.collectWhenResume
 import common.hoangdz.lib.jetpack_compose.exts.toComposeDP
 import kotlin.math.abs
@@ -57,7 +57,7 @@ fun TargetTapView(
     val content = targetScope.currentContent
     val size = content.shape.size.minDimension / 2
     Box(Modifier
-        .clickable(
+        .clickableWithDebounce(
             interactionSource = interactionSource, indication = null
         ) {
             if (skipWhenClickOutside) targetScope.cancelTarget()
@@ -78,7 +78,7 @@ fun TargetTapView(
             Offset(abs(x), abs(y))
         }
         Box(modifier = Modifier
-            .clickable(
+            .clickableWithDebounce(
                 interactionSource = interactionSource, indication = null
             ) {
                 targetScope.moveToNextTarget()

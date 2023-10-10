@@ -2,7 +2,6 @@ package common.hoangdz.lib.jetpack_compose.view
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import common.hoangdz.lib.R
+import common.hoangdz.lib.jetpack_compose.exts.clickableWithDebounce
 import common.hoangdz.lib.jetpack_compose.exts.toComposeDP
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -94,7 +94,7 @@ data class MenuItem(
             Box(modifier = Modifier
                 .padding(4.sdp)
                 .clip(RoundedCornerShape(6.sdp))
-                .clickable {
+                .clickableWithDebounce {
                     clickListener?.invoke()
                 }
                 .padding(4.sdp)) {

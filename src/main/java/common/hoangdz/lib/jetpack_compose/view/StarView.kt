@@ -2,7 +2,6 @@ package common.hoangdz.lib.jetpack_compose.view
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -13,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import common.hoangdz.lib.jetpack_compose.exts.clickableWithDebounce
 import ir.kaaveh.sdpcompose.sdp
 
 @Composable
@@ -32,7 +32,7 @@ fun StarView(
         for (i in 0 until totalStar) Image(modifier = Modifier
             .width(32.sdp)
             .clip(CircleShape)
-            .clickable {
+            .clickableWithDebounce {
                 onStarChange(i + 1)
             }
             .padding(4.sdp),
