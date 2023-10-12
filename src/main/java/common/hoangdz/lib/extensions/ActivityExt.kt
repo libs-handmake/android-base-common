@@ -15,6 +15,7 @@ fun Activity.configureWindowForTransparency() {
 fun Activity.setStatusBarTextColorMode(mode: StatusBarColorMode) {
     val wC = WindowCompat.getInsetsController(window, window.decorView)
     wC.isAppearanceLightStatusBars = mode == StatusBarColorMode.LIGHT
+    wC.isAppearanceLightNavigationBars = mode == StatusBarColorMode.LIGHT
 }
 
 fun Activity.configureStatusBarForFullscreenExperience() {/*    val window: Window = window
