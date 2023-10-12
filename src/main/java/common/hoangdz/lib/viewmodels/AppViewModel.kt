@@ -59,13 +59,18 @@ open class AppViewModel(application: Application) : AndroidViewModel(application
         if (dataUpdate?.value?.state != DataResult.DataState.LOADED) dataUpdate?.value =
             DataResult(DataResult.DataState.LOADING)
         viewModelScope.launchIO {
-            val result = task()
-            if (result is Source.Success<T>) {
-                dataUpdate?.value = DataResult(DataResult.DataState.LOADED, result.value)
-                onSuccess?.invoke(result.value)
-            } else if (result is Source.Failure) {
+            try {
+                val result = task()
+                if (result is Source.Success<T>) {
+                    dataUpdate?.value = DataResult(DataResult.DataState.LOADED, result.value)
+                    onSuccess?.invoke(result.value)
+                } else if (result is Source.Failure) {
+                    dataUpdate?.value = DataResult(DataResult.DataState.ERROR)
+                    onFailure?.invoke(result)
+                }
+            } catch (e: Throwable) {
                 dataUpdate?.value = DataResult(DataResult.DataState.ERROR)
-                onFailure?.invoke(result)
+                onFailure?.invoke(Source.Failure())
             }
         }
     }
