@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -20,20 +21,20 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun <T> ListDisplay(
     dataState: StateFlow<DataResult<List<T>>>,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = SafeModifier,
     onPlaceHolder: @Composable (data: DataResult<List<T>>) -> Unit = {
-        Box(Modifier.fillMaxSize()) {
+        Box(SafeModifier.fillMaxSize()) {
             Text(
-                modifier = Modifier.align(Alignment.Center),
+                modifier = SafeModifier.align(Alignment.Center),
                 text = stringResource(id = R.string.no_data),
                 style = TextStyle(color = Color.Black, fontSize = 14.ssp)
             )
         }
     },
     onLoading: @Composable (data: DataResult<List<T>>) -> Unit = {
-        Box(Modifier.fillMaxSize()) {
+        Box(SafeModifier.fillMaxSize()) {
             CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center), color = Color.DarkGray
+                modifier = SafeModifier.align(Alignment.Center), color = Color.DarkGray
             )
         }
     },
@@ -43,7 +44,8 @@ fun <T> ListDisplay(
     when (data.state) {
         DataResult.DataState.LOADING, DataResult.DataState.IDLE -> onLoading(data)
         DataResult.DataState.LOADED -> {
-            (data.value).takeIf { !it.isNullOrEmpty() }?.let { onData(it) } ?: onPlaceHolder(data)
+            (data.value).takeIf { !it.isNullOrEmpty() }
+                ?.let { Box(modifier = modifier) { onData(it) } } ?: onPlaceHolder(data)
         }
 
         DataResult.DataState.ERROR -> onPlaceHolder(data)

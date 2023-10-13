@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import common.hoangdz.lib.jetpack_compose.exts.clickableWithDebounce
@@ -17,7 +18,7 @@ import ir.kaaveh.sdpcompose.sdp
 
 @Composable
 fun StarView(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = SafeModifier,
     @DrawableRes starDrawable: Int,
     @DrawableRes unStarDrawable: Int,
     totalStar: Int = 5,
@@ -29,7 +30,7 @@ fun StarView(
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        for (i in 0 until totalStar) Image(modifier = Modifier
+        for (i in 0 until totalStar) Image(modifier = SafeModifier
             .width(32.sdp)
             .clip(CircleShape)
             .clickableWithDebounce {

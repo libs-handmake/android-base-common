@@ -4,9 +4,11 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -24,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import common.hoangdz.lib.R
 import common.hoangdz.lib.jetpack_compose.exts.clickableWithDebounce
@@ -34,7 +38,7 @@ import kotlin.math.max
 
 @Composable
 fun Toolbar(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = SafeModifier,
     backIcon: MenuItem? = null,
     title: String = "",
     onBuildTitleStyle: @Composable (TextStyle) -> TextStyle = { it },
@@ -52,10 +56,10 @@ fun Toolbar(
         )
     )
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        backIcon?.RenderMenu(Modifier.onGloballyPositioned {
+        backIcon?.RenderMenu(SafeModifier.onGloballyPositioned {
             sizeLeft = it.size.width
         })
-        Box(modifier = Modifier.weight(1f).run {
+        Box(modifier = SafeModifier.weight(1f).wrapContentWidth(Alignment.Start).run {
             if (textStyle.textAlign == TextAlign.Center) padding(
                 start = max(sizeRight - sizeLeft, 0).toComposeDP(),
                 end = max(sizeLeft - sizeRight, 0).toComposeDP()
@@ -66,14 +70,15 @@ fun Toolbar(
                 Text(
                     text = text,
                     style = textStyle,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = SafeModifier
                         .padding(8.sdp)
+                        .fillMaxWidth(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
-
             }
         }
-        Row(Modifier.onGloballyPositioned {
+        Row(SafeModifier.onGloballyPositioned {
             sizeRight = it.size.width
         }) {
             menuItems.map { it.RenderMenu() }
@@ -89,9 +94,9 @@ data class MenuItem(
 ) {
 
     @Composable
-    fun RenderMenu(modifier: Modifier = Modifier) {
+    fun RenderMenu(modifier: Modifier = SafeModifier) {
         Box(modifier) {
-            Box(modifier = Modifier
+            Box(modifier = SafeModifier
                 .padding(4.sdp)
                 .clip(RoundedCornerShape(6.sdp))
                 .clickableWithDebounce {
@@ -103,7 +108,7 @@ data class MenuItem(
                         painter = painterResource(id = icon),
                         colorFilter = colorFilter,
                         contentDescription = "Back icon",
-                        modifier = Modifier
+                        modifier = SafeModifier
                             .width(28.sdp)
                             .padding(6.sdp)
                     )

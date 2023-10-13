@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
@@ -23,7 +24,7 @@ import kotlin.math.abs
 fun PagerView(
     vararg pages: @Composable (Modifier) -> Unit,
     selected: Int,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = SafeModifier,
     animationSpec: AnimationSpec<Float> = tween(400)
 ) {
     val pageCache = remember {
@@ -58,16 +59,16 @@ fun PagerView(
     val width = LocalConfiguration.current.screenWidthDp.dp
     Box(modifier) {
         if (pageCache.isEmpty()) {
-            pages[selectedPage](Modifier)
+            pages[selectedPage](SafeModifier)
         } else for (page in pageCache) {
             pages[page](
                 if ((page != selected && page != preSelectedPage)) {
-                    Modifier.alpha(0f)
+                    SafeModifier.alpha(0f)
                 } else {
                     val alpha =
                         .5f + .5f * if (page == selectedPage) realProgress else 1f - realProgress
                     if (page == preSelectedPage) logError("alpha $page $alpha")
-                    Modifier
+                    SafeModifier
                         .alpha(alpha)
                         .offset(
                             width * (if (page == selectedPage) 1 - realProgress else -realProgress) * selected.compareTo(

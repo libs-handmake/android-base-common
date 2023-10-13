@@ -1,21 +1,35 @@
 package common.hoangdz.lib.jetpack_compose.exts
 
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Indication
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.IntSize
+import common.hoangdz.lib.utils.error_handle.ErrorCollector
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.min
@@ -99,3 +113,62 @@ fun Modifier.clickableWithDebounce(
     }
     return this
 }
+
+
+@Composable
+fun Modifier.shimmerEffect(
+    shape: Shape = RectangleShape, colors: List<Color> = listOf(
+        Color(0xFFB8B5B5),
+        Color(0xFF8F8B8B),
+        Color(0xFFB8B5B5),
+    )
+): Modifier = composed {
+    var size by remember {
+        mutableStateOf(IntSize.Zero)
+    }
+    val transition = rememberInfiniteTransition(label = "transition")
+    val startOffsetX by transition.animateFloat(
+        initialValue = -2 * size.width.toFloat(),
+        targetValue = 2 * size.width.toFloat(),
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000)
+        ),
+        label = "startOffsetX"
+    )
+    background(
+        brush = Brush.linearGradient(
+            colors = colors,
+            start = Offset(startOffsetX, 0f),
+            end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
+        ), shape
+    ).onGloballyPositioned {
+        size = it.size
+    }
+}
+
+
+val SafeModifier: Modifier
+    get() = Modifier.layout { measurable, constraints ->
+        fun measure(eCount: Int = 0, e: Throwable? = null): MeasureResult {
+            if (eCount == 3) {
+                e?.let { ErrorCollector.collectError(it) }
+                return try {
+                    val placeable = measurable.measure(Constraints.fixed(200, 200))
+                    layout(200, 200) {
+                        placeable.placeRelative(0, 0)
+                    }
+                } catch (e: Throwable) {
+                    layout(0, 0) {}
+                }
+            }
+            return try {
+                val placeable = measurable.measure(constraints)
+                layout(placeable.width, placeable.height) {
+                    placeable.placeRelative(0, 0)
+                }
+            } catch (e: Throwable) {
+                measure(eCount + 1, e)
+            }
+        }
+        measure()
+    }

@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ClipOp
@@ -21,6 +20,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.layout.onGloballyPositioned
+import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import common.hoangdz.lib.jetpack_compose.exts.clickableWithDebounce
 import common.hoangdz.lib.jetpack_compose.exts.collectWhenResume
 import common.hoangdz.lib.jetpack_compose.exts.toComposeDP
@@ -56,7 +56,7 @@ fun TargetTapView(
     if (!showing) return
     val content = targetScope.currentContent
     val size = content.shape.size.minDimension / 2
-    Box(Modifier
+    Box(SafeModifier
         .clickableWithDebounce(
             interactionSource = interactionSource, indication = null
         ) {
@@ -65,7 +65,7 @@ fun TargetTapView(
         .onGloballyPositioned {
             targetScope.reverseAnim()
         }) {
-        Canvas(modifier = Modifier.fillMaxSize(), onDraw = {
+        Canvas(modifier = SafeModifier.fillMaxSize(), onDraw = {
             val circlePath = Path().apply {
                 addOval(Rect(content.shape.position, size * 1.2f + size * .3f * animValue))
             }
@@ -77,7 +77,7 @@ fun TargetTapView(
         val clickOffset = (content.shape.position - Offset(clickSize / 2f, clickSize / 2f)).run {
             Offset(abs(x), abs(y))
         }
-        Box(modifier = Modifier
+        Box(modifier = SafeModifier
             .clickableWithDebounce(
                 interactionSource = interactionSource, indication = null
             ) {

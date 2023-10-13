@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,7 +14,7 @@ import common.hoangdz.lib.extensions.getActivity
 
 @Composable
 fun Navigation(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = SafeModifier,
     vararg screenNavigators: ScreenNavConfig<*>,
     backGround: @Composable (ScreenConfigs) -> Unit = {},
     foreground: @Composable (ScreenConfigs) -> Unit = {}
@@ -33,7 +34,7 @@ fun Navigation(
                 )
                 val activity = LocalContext.current.getActivity()
                 Box(modifier = modifier) {
-                    Box(modifier = Modifier.fillMaxSize()) {
+                    Box(modifier = SafeModifier.fillMaxSize()) {
                         backGround(config)
                     }
                     BackHandler {
@@ -45,7 +46,7 @@ fun Navigation(
                     nav.BuildContent(
                         screenNavConfig = config
                     )
-                    Box(modifier = Modifier.fillMaxSize()) {
+                    Box(modifier = SafeModifier.fillMaxSize()) {
                         foreground(config)
                     }
                 }
