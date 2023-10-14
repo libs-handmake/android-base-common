@@ -155,7 +155,7 @@ val SafeModifier: Modifier
                 return try {
                     val placeable = measurable.measure(Constraints.fixed(200, 200))
                     layout(200, 200) {
-                        placeable.placeRelative(0, 0)
+                        kotlin.runCatching { placeable.placeRelative(0, 0) }
                     }
                 } catch (e: Throwable) {
                     layout(0, 0) {}
@@ -164,7 +164,9 @@ val SafeModifier: Modifier
             return try {
                 val placeable = measurable.measure(constraints)
                 layout(placeable.width, placeable.height) {
-                    placeable.placeRelative(0, 0)
+                    kotlin.runCatching {
+                        placeable.placeRelative(0, 0)
+                    }
                 }
             } catch (e: Throwable) {
                 measure(eCount + 1, e)
