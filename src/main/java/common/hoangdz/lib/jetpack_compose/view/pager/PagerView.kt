@@ -12,11 +12,10 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import common.hoangdz.lib.extensions.logError
+import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import ir.kaaveh.sdpcompose.sdp
 import kotlin.math.abs
 
@@ -67,7 +66,6 @@ fun PagerView(
                 } else {
                     val alpha =
                         .5f + .5f * if (page == selectedPage) realProgress else 1f - realProgress
-                    if (page == preSelectedPage) logError("alpha $page $alpha")
                     SafeModifier
                         .alpha(alpha)
                         .offset(

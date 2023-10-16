@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -18,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -29,7 +27,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import common.hoangdz.lib.R
+import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import common.hoangdz.lib.jetpack_compose.exts.clickableWithDebounce
 import common.hoangdz.lib.jetpack_compose.exts.toComposeDP
 import ir.kaaveh.sdpcompose.sdp
@@ -41,6 +41,8 @@ fun Toolbar(
     modifier: Modifier = SafeModifier,
     backIcon: MenuItem? = null,
     title: String = "",
+    color: Color = Color.Black,
+    iconSize: Dp = 24.sdp,
     onBuildTitleStyle: @Composable (TextStyle) -> TextStyle = { it },
     menuItems: MutableList<MenuItem> = mutableListOf()
 ) {
@@ -58,7 +60,7 @@ fun Toolbar(
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         backIcon?.RenderMenu(SafeModifier.onGloballyPositioned {
             sizeLeft = it.size.width
-        })
+        }, iconSize, color)
         Box(modifier = SafeModifier.weight(1f).wrapContentWidth(Alignment.Start).run {
             if (textStyle.textAlign == TextAlign.Center) padding(
                 start = max(sizeRight - sizeLeft, 0).toComposeDP(),
@@ -80,21 +82,21 @@ fun Toolbar(
         }
         Row(SafeModifier.onGloballyPositioned {
             sizeRight = it.size.width
-        }) {
-            menuItems.map { it.RenderMenu() }
+        }, verticalAlignment = Alignment.CenterVertically) {
+            menuItems.map { it.RenderMenu(iconSize = iconSize, color = color) }
         }
     }
 }
 
 data class MenuItem(
     @DrawableRes val icon: Int? = null,
-    val colorFilter: ColorFilter = ColorFilter.tint(Color.Black),
+    val colorFilter: ColorFilter? = null,
     val itemView: (@Composable () -> Unit)? = null,
     val clickListener: (() -> Unit)? = null
 ) {
 
     @Composable
-    fun RenderMenu(modifier: Modifier = SafeModifier) {
+    fun RenderMenu(modifier: Modifier = SafeModifier, iconSize: Dp, color: Color) {
         Box(modifier) {
             Box(modifier = SafeModifier
                 .padding(4.sdp)
@@ -106,11 +108,11 @@ data class MenuItem(
                 icon?.let {
                     Image(
                         painter = painterResource(id = icon),
-                        colorFilter = colorFilter,
+                        colorFilter = colorFilter ?: ColorFilter.tint(color),
                         contentDescription = "Back icon",
                         modifier = SafeModifier
-                            .width(28.sdp)
-                            .padding(6.sdp)
+                            .width(iconSize)
+                            .padding(4.sdp)
                     )
                 } ?: itemView?.invoke()
 
