@@ -1,6 +1,8 @@
 package common.hoangdz.lib.media.audio
 
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.media.MediaPlayer
 import common.hoangdz.lib.Constant
@@ -39,6 +41,10 @@ internal class SimpleAudioService(
     private var vibrateJob: Job? = null
 
     private var flashLightJob: Job? = null
+
+    private var previousMode: Int = 0
+
+    private var previousIsSpeakOn = false
 
     override fun toggleWithSourceAsset(source: String, audioOptions: AudioOptions) {
         val rSource = source.replace(Constant.ASSET_FILE_PATH, "")
@@ -135,6 +141,8 @@ internal class SimpleAudioService(
 
     override fun pause() {
         sync {
+            restoreSpeakerMode()
+            audioManager.mode = previousMode
             mediaPlayer?.pause()
             _playState.value = PlayState.PAUSED
             stopVibration()
@@ -144,6 +152,8 @@ internal class SimpleAudioService(
 
     override fun play() {
         sync {
+            setOutputSpeakerIfNeeded()
+            previousMode = audioManager.mode
             mediaPlayer?.start()
             _playState.value = PlayState.PLAYING
             vibrate()
@@ -164,6 +174,7 @@ internal class SimpleAudioService(
 
     override fun stop() {
         sync {
+            restoreSpeakerMode()
             mediaPlayer?.stop()
             _playState.value = PlayState.PAUSED
             stopVibration()
@@ -179,6 +190,7 @@ internal class SimpleAudioService(
     }
 
     private fun releaseMediaPlayer() {
+        restoreSpeakerMode()
         stopVibration()
         stopTorch()
         mediaPreparedJob?.cancel()
@@ -194,5 +206,18 @@ internal class SimpleAudioService(
                 runCatching(block)
             }
         }
+    }
+
+    private fun setOutputSpeakerIfNeeded() {
+        if (currentOptions?.playViaSpeakerOnly != true) return
+        previousMode = audioManager.mode
+        previousIsSpeakOn = audioManager.isSpeakerphoneOn
+        audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
+        audioManager.isSpeakerphoneOn = true
+    }
+
+    private fun restoreSpeakerMode() {
+        audioManager.mode = previousMode
+        audioManager.isSpeakerphoneOn = audioManager.isSpeakerphoneOn
     }
 }

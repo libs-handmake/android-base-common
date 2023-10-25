@@ -1,10 +1,11 @@
 package common.hoangdz.lib.media.audio
 
-class AudioOptions(
+class AudioOptions constructor(
     val isLooping: Boolean = false,
     val vibratorOptions: VibrateOptions = VibrateOptions(),
     val flashLightOptions: FlashLightOptions = FlashLightOptions(),
-    val adjustVolume: Pair<Boolean, Float> = false to 0f
+    val adjustVolume: Pair<Boolean, Float> = false to 0f,
+    val playViaSpeakerOnly: Boolean = false
 ) {
 
     /**
