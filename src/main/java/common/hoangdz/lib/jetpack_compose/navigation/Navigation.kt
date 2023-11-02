@@ -4,13 +4,14 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import common.hoangdz.lib.extensions.getActivity
+import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 
 @Composable
 fun Navigation(
@@ -22,6 +23,9 @@ fun Navigation(
     if (screenNavigators.isEmpty()) return
     val navController = rememberNavController()
     val activity = LocalContext.current.getActivity()
+    LaunchedEffect(navController) {
+        ScreenConfigs.navController = navController
+    }
     NavHost(
         navController = navController, startDestination = screenNavigators.first().routePattern
     ) {
@@ -30,7 +34,7 @@ fun Navigation(
                 nav.enterTransition()
             }, exitTransition = { nav.exitTransition() }, arguments = nav.getArgumentPattern()) {
                 val config = ScreenConfigs(
-                    navController, it.destination.route ?: return@composable, it.arguments
+                    it.destination.route ?: return@composable, it.arguments
                 )
                 val activity = LocalContext.current.getActivity()
                 Box(modifier = modifier) {

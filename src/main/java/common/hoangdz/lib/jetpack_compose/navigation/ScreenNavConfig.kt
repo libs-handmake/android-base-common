@@ -39,7 +39,7 @@ abstract class ScreenNavConfig<T> {
     }
 
     open fun navigationInfo(data: T? = null): String = routePattern
-    fun makeRealRoute(bundle: Bundle?): String {
+    protected fun makeRealRoute(bundle: Bundle?): String {
         var r = routePattern.replace("\\?(.*?)$".toRegex(), "")
         bundle?.keySet()?.forEach {
             if (bundle.getString(it).isNullOrEmpty()) return@forEach

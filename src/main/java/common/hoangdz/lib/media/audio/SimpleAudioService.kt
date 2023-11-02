@@ -209,15 +209,15 @@ internal class SimpleAudioService(
     }
 
     private fun setOutputSpeakerIfNeeded() {
-        if (currentOptions?.playViaSpeakerOnly != true) return
-        previousMode = audioManager.mode
-        previousIsSpeakOn = audioManager.isSpeakerphoneOn
-        audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
-        audioManager.isSpeakerphoneOn = true
+//        if (currentOptions?.playViaSpeakerOnly != true) return
+//        previousMode = audioManager.mode
+//        previousIsSpeakOn = audioManager.isSpeakerphoneOn
+//        audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
+//        audioManager.isSpeakerphoneOn = true
     }
 
     private fun restoreSpeakerMode() {
-        audioManager.mode = previousMode
-        audioManager.isSpeakerphoneOn = audioManager.isSpeakerphoneOn
+//        audioManager.mode = previousMode
+//        audioManager.isSpeakerphoneOn = audioManager.isSpeakerphoneOn
     }
 }
