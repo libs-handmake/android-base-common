@@ -24,6 +24,11 @@ abstract class ComposeActivity : AppCompatActivity() {
         ActivityLifecycleManager.add(this)
     }
 
+    override fun onResume() {
+        ActivityLifecycleManager.add(this)
+        super.onResume()
+    }
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         ActivityLifecycleManager.add(this)
