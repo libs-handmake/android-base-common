@@ -3,6 +3,7 @@ package common.hoangdz.lib.di
 import android.content.Context
 import common.hoangdz.lib.media.audio.AudioService
 import common.hoangdz.lib.media.audio.SimpleAudioService
+import common.hoangdz.lib.media.tts.TextToSpeechHelper
 import common.hoangdz.lib.media.video.torch.TorchHelper
 import dagger.Module
 import dagger.Provides
@@ -19,7 +20,9 @@ class GlobalModule {
     @Provides
     @Singleton
     fun provideAudioService(
-        @ApplicationContext context: Context,
-        torchHelper: TorchHelper
+        @ApplicationContext context: Context, torchHelper: TorchHelper
     ): AudioService = SimpleAudioService(context, torchHelper)
+
+    @Provides
+    fun provideTextToSpeech(@ApplicationContext context: Context) = TextToSpeechHelper(context)
 }
