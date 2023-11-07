@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import common.hoangdz.lib.R
+import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import common.hoangdz.lib.jetpack_compose.exts.collectWhenResume
 import common.hoangdz.lib.viewmodels.DataResult
 import ir.kaaveh.sdpcompose.ssp
@@ -41,13 +41,15 @@ fun <T> ListDisplay(
     onData: @Composable (List<T>) -> Unit = {},
 ) {
     val data by dataState.collectWhenResume()
-    when (data.state) {
-        DataResult.DataState.LOADING, DataResult.DataState.IDLE -> onLoading(data)
-        DataResult.DataState.LOADED -> {
-            (data.value).takeIf { !it.isNullOrEmpty() }
-                ?.let { Box(modifier = modifier) { onData(it) } } ?: onPlaceHolder(data)
-        }
+    Box(modifier) {
+        when (data.state) {
+            DataResult.DataState.LOADING, DataResult.DataState.IDLE -> onLoading(data)
+            DataResult.DataState.LOADED -> {
+                (data.value).takeIf { !it.isNullOrEmpty() }
+                    ?.let { onData(it) } ?: onPlaceHolder(data)
+            }
 
-        DataResult.DataState.ERROR -> onPlaceHolder(data)
+            DataResult.DataState.ERROR -> onPlaceHolder(data)
+        }
     }
 }
