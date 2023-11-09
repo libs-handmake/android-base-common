@@ -368,10 +368,12 @@ fun Context.createVibratorSupport(): Vibrator {
 
 fun Vibrator.vibrateSupport(millis: Long) {
     if (!hasVibrator()) return
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        vibrate(VibrationEffect.createOneShot(millis, VibrationEffect.DEFAULT_AMPLITUDE))
-    } else {
-        @Suppress("DEPRECATION") vibrate(millis)
+    kotlin.runCatching {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrate(VibrationEffect.createOneShot(millis, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            @Suppress("DEPRECATION") vibrate(millis)
+        }
     }
 }
 

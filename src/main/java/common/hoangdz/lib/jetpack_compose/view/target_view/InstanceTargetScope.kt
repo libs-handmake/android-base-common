@@ -29,17 +29,20 @@ internal class InstanceTargetScope(
         get() = content[currentIndex]
 
     override fun moveToNextTarget() {
+        currentContent.onTargetClicked?.invoke()
         onTargetClicked?.invoke(currentContent)
         if (currentIndex < content.lastIndex) currentIndex++
         else skipAllTarget()
     }
 
     override fun skipAllTarget() {
+        currentContent.onTargetSkip?.invoke()
         _showingContent.value = false
         onTargetClosed?.invoke()
     }
 
     override fun cancelTarget() {
+        currentContent.onTargetCancel?.invoke()
         _showingContent.value = false
         onTargetCancel?.invoke()
     }

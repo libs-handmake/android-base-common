@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import common.hoangdz.lib.jetpack_compose.exts.clickableWithDebounce
 import common.hoangdz.lib.jetpack_compose.exts.collectWhenResume
+import common.hoangdz.lib.jetpack_compose.exts.scale
 import common.hoangdz.lib.jetpack_compose.exts.toComposeDP
 import kotlin.math.abs
 
@@ -55,7 +56,6 @@ fun TargetTapView(
     val showing by targetScope.showingContent.collectWhenResume()
     if (!showing) return
     val content = targetScope.currentContent
-    val size = content.shape.size.minDimension / 2
     Box(SafeModifier
         .clickableWithDebounce(
             interactionSource = interactionSource, indication = null
@@ -67,14 +67,24 @@ fun TargetTapView(
         }) {
         Canvas(modifier = SafeModifier.fillMaxSize(), onDraw = {
             val circlePath = Path().apply {
-                addOval(Rect(content.shape.position, size * 1.2f + size * .3f * animValue))
+                if (content.shape is TargetShape.CircleShape) {
+                    addOval(
+                        Rect(
+                            content.shape.position,
+                            content.shape.size.width * (1.1f + .2f * animValue)
+                        )
+                    )
+                } else if (content.shape is TargetShape.RoundedRectangleShape) {
+                    addRoundRect(content.shape.rect.scale(1.1f + .1f * animValue))
+                }
             }
             clipPath(circlePath, clipOp = ClipOp.Difference) {
                 drawRect(SolidColor(Color.Black.copy(alpha = 0.6f)))
             }
         })
-        val clickSize = size * 2f
-        val clickOffset = (content.shape.position - Offset(clickSize / 2f, clickSize / 2f)).run {
+        val clickOffset = (content.shape.position - Offset(
+            content.shape.size.width / 2f, content.shape.size.height / 2f
+        )).run {
             Offset(abs(x), abs(y))
         }
         Box(modifier = SafeModifier
@@ -84,7 +94,10 @@ fun TargetTapView(
                 targetScope.moveToNextTarget()
             }
             .padding(top = clickOffset.y.toComposeDP(), start = clickOffset.x.toComposeDP())
-            .size((clickSize).toComposeDP()))
+            .size(
+                (content.shape.size.width).toComposeDP(),
+                content.shape.size.height.toComposeDP()
+            ))
         content.content.invoke(targetScope)
     }
 }
