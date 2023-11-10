@@ -468,8 +468,9 @@ fun Context.startForegroundServiceSupport(intent: Intent) {
     } else startService(intent)
 }
 
-fun Context.setLocaleSupport(code: String) {
-    val locale = Locale(code)
+fun Context.setLocaleSupport(c: String) {
+    val ca = c.split("-")
+    val locale = Locale(ca.firstOrNull() ?: return, ca.getOrNull(1) ?: "")
     Locale.setDefault(locale)
     val tag = locale.toLanguageTag()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
