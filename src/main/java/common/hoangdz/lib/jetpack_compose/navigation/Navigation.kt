@@ -4,9 +4,11 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -47,9 +49,11 @@ fun Navigation(
                             activity?.finish()
                         }
                     }
-                    nav.BuildContent(
-                        screenNavConfig = config
-                    )
+                    CompositionLocalProvider(LocalScreenConfigs provides config) {
+                        nav.BuildContent(
+                            screenNavConfig = config
+                        )
+                    }
                     Box(modifier = SafeModifier.fillMaxSize()) {
                         foreground(config)
                     }

@@ -2,6 +2,7 @@ package common.hoangdz.lib.jetpack_compose.navigation
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.navigation.NavHostController
 
 open class ScreenNavigator(
@@ -26,3 +27,5 @@ data class ScreenConfigs(
         }
     }
 }
+
+val LocalScreenConfigs = compositionLocalOf { ScreenConfigs("Nowhere_screen") }
