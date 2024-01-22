@@ -14,6 +14,9 @@ data class ScreenConfigs(
    val route: String, val argument: Bundle? = null
 ) {
 
+    val actualRouteName
+        get() = route.replace("\\?.*".toRegex(), "")
+
     companion object{
         var navController: NavHostController? = null
     }
