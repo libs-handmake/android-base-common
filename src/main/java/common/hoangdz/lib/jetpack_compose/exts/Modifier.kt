@@ -42,7 +42,9 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 fun Modifier.gradientBackground(
-    colors: List<Color>, angle: Float = 0f, tileMode: TileMode = TileMode.Clamp
+    colors: List<Color>,
+    angle: Float = 0f,
+    tileMode: TileMode = TileMode.Clamp
 ) = this.then(Modifier.drawBehind {
     val angleRad = angle / 180f * PI
     val x = cos(angleRad).toFloat() //Fractional x

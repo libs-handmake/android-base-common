@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,10 +25,17 @@ fun Navigation(
 ) {
     if (screenNavigators.isEmpty()) return
     val navController = rememberNavController()
+    val owner = LocalLifecycleOwner.current
     val activity = LocalContext.current.getActivity()
     LaunchedEffect(navController) {
         ScreenConfigs.navController = navController
     }
+    DisposableEffect(owner) {
+        onDispose {
+            ScreenConfigs.navController = null
+        }
+    }
+
     NavHost(
         navController = navController, startDestination = screenNavigators.first().routePattern
     ) {

@@ -1,5 +1,6 @@
 package common.hoangdz.lib.jetpack_compose.navigation
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
@@ -11,14 +12,29 @@ open class ScreenNavigator(
 )
 
 data class ScreenConfigs(
-   val route: String, val argument: Bundle? = null
+    val route: String, val argument: Bundle? = null
 ) {
 
     val actualRouteName
         get() = route.replace("\\?.*".toRegex(), "")
 
-    companion object{
+    companion object {
         var navController: NavHostController? = null
+    }
+
+    fun pop(activity: Activity?, navID: String? = null) {
+        if (navID.isNullOrEmpty()) navController?.popBackStack()
+        else navController?.popBackStack(navID, true)
+    }
+
+    fun navigate(
+        route: String,
+        replacement: Boolean = false,
+    ) {
+        kotlin.runCatching {
+            if (replacement) navigateAndReplace(route)
+            else navController?.navigate(route)
+        }
     }
 
     var onBackPressed: (() -> Boolean) = { false }
@@ -30,5 +46,6 @@ data class ScreenConfigs(
         }
     }
 }
+
 
 val LocalScreenConfigs = compositionLocalOf { ScreenConfigs("Nowhere_screen") }

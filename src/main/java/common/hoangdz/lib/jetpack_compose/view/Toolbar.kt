@@ -76,6 +76,7 @@ fun Toolbar(
                         .padding(8.sdp)
                         .fillMaxWidth(),
                     maxLines = 1,
+                    color = color,
                     overflow = TextOverflow.Ellipsis
                 )
             }

@@ -53,7 +53,5 @@ abstract class ComposeActivity : AppCompatActivity() {
     }
 
     @Composable
-    open fun ComposeContent() {
-
-    }
+    abstract fun ComposeContent()
 }
