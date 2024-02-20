@@ -21,12 +21,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -179,6 +182,16 @@ val SafeModifier: Modifier
             }
         }
         measure()
+    }
+
+
+fun Modifier.textBrush(brush: Brush) = this
+    .graphicsLayer(alpha = 0.99f)
+    .drawWithCache {
+        onDrawWithContent {
+            drawContent()
+            drawRect(brush, blendMode = BlendMode.SrcAtop)
+        }
     }
 
 @Composable
