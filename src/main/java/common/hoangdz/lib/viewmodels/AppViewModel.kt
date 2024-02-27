@@ -25,30 +25,6 @@ open class AppViewModel(application: Application) : AndroidViewModel(application
     val errorMessage: LiveData<Source.Failure>
         get() = _errorMessage
 
-    @Deprecated(
-        "", replaceWith = ReplaceWith(
-            "launchData(dataUpdate = ,onSuccess = onSuccess,onFailure = onFailure,task)"
-        )
-    )
-    fun <T> launchData(
-        dataUpdate: MutableLiveData<T>? = null,
-        progressUpdate: MutableLiveData<Boolean>? = _isLoading,
-        onSuccess: ((T) -> Unit)? = null,
-        onFailure: (Source.Failure) -> Unit = { _errorMessage.postValue(it) },
-        task: suspend () -> Source<T>
-    ) {
-        progressUpdate?.postValue(true)
-        viewModelScope.launchIO {
-            val result = task()
-            if (result is Source.Success<T>) {
-                dataUpdate?.postValue(result.value)
-                onSuccess?.invoke(result.value)
-            } else if (result is Source.Failure) {
-                onFailure(result)
-            }
-            progressUpdate?.postValue(false)
-        }
-    }
 
     fun <T> launchData(
         dataUpdate: MutableStateFlow<DataResult<T>>? = null,
@@ -72,6 +48,31 @@ open class AppViewModel(application: Application) : AndroidViewModel(application
                 dataUpdate?.value = DataResult(DataResult.DataState.ERROR)
                 onFailure?.invoke(Source.Failure())
             }
+        }
+    }
+
+    @Deprecated(
+        "", replaceWith = ReplaceWith(
+            "launchData(dataUpdate = ,onSuccess = onSuccess,onFailure = onFailure,task)"
+        )
+    )
+    fun <T> launchData(
+        dataUpdate: MutableLiveData<T>? = null,
+        progressUpdate: MutableLiveData<Boolean>? = _isLoading,
+        onSuccess: ((T) -> Unit)? = null,
+        onFailure: (Source.Failure) -> Unit = { _errorMessage.postValue(it) },
+        task: suspend () -> Source<T>
+    ) {
+        progressUpdate?.postValue(true)
+        viewModelScope.launchIO {
+            val result = task()
+            if (result is Source.Success<T>) {
+                dataUpdate?.postValue(result.value)
+                onSuccess?.invoke(result.value)
+            } else if (result is Source.Failure) {
+                onFailure(result)
+            }
+            progressUpdate?.postValue(false)
         }
     }
 
