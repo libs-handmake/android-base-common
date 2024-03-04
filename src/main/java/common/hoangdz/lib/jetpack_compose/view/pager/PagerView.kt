@@ -3,6 +3,8 @@ package common.hoangdz.lib.jetpack_compose.view.pager
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
@@ -56,25 +58,33 @@ fun PagerView(
     val realProgress = if (target == 0f) 1f - animPr else animPr
 
     val width = LocalConfiguration.current.screenWidthDp.dp
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
     Box(modifier) {
         if (pageCache.isEmpty()) {
             pages[selectedPage](SafeModifier)
         } else for (page in pageCache) {
-            pages[page](
-                if ((page != selected && page != preSelectedPage)) {
-                    SafeModifier.alpha(0f)
-                } else {
-                    val alpha =
-                        .5f + .5f * if (page == selectedPage) realProgress else 1f - realProgress
-                    SafeModifier
-                        .alpha(alpha)
-                        .offset(
-                            width * (if (page == selectedPage) 1 - realProgress else -realProgress) * selected.compareTo(
-                                preSelectedPage
-                            ), 0.sdp
-                        )
-                }
-            )
+            pages[page](if ((page != selected && page != preSelectedPage)) {
+                SafeModifier
+                    .alpha(0f)
+                    .clickable(interactionSource = interactionSource, null) {
+
+                    }
+            } else {
+                val alpha =
+                    .5f + .5f * if (page == selectedPage) realProgress else 1f - realProgress
+                SafeModifier
+                    .alpha(alpha)
+                    .clickable(interactionSource = interactionSource, null) {
+
+                    }
+                    .offset(
+                        width * (if (page == selectedPage) 1 - realProgress else -realProgress) * selected.compareTo(
+                            preSelectedPage
+                        ), 0.sdp
+                    )
+            })
         }
 
     }

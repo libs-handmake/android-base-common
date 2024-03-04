@@ -22,9 +22,9 @@ data class ScreenConfigs(
         var navController: NavHostController? = null
     }
 
-    fun pop(activity: Activity?, navID: String? = null) {
+    fun pop(activity: Activity?, navID: String? = null, inclusive: Boolean = true) {
         if (navID.isNullOrEmpty()) navController?.popBackStack()
-        else navController?.popBackStack(navID, true)
+        else navController?.popBackStack(navID, inclusive)
     }
 
     fun navigate(
