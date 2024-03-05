@@ -8,9 +8,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.DialogProperties
+import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import common.hoangdz.lib.jetpack_compose.exts.collectWhenResume
 import common.hoangdz.lib.viewmodels.DialogViewModel
 import ir.kaaveh.sdpcompose.sdp
@@ -19,17 +19,19 @@ import ir.kaaveh.sdpcompose.sdp
 @Composable
 fun ComposeDialog(
     dialogViewModel: DialogViewModel,
-    modifier: Modifier = SafeModifier
-        .padding(16.sdp)
-        .background(Color.White, RoundedCornerShape(8))
-        .padding(8.sdp),
+    modifier: Modifier? = null,
     onDismissRequest: () -> Boolean = { true },
     properties: DialogProperties = DialogProperties(),
     DialogContent: @Composable () -> Unit
 ) {
     val isShow by dialogViewModel.dialogState.collectWhenResume()
     if (!isShow) return
-    AlertDialog(modifier = modifier, properties = properties, onDismissRequest = {
+    AlertDialog(modifier = modifier ?: SafeModifier
+        .padding(16.sdp)
+        .background(
+            Color.White, RoundedCornerShape(8)
+        )
+        .padding(8.sdp), properties = properties, onDismissRequest = {
         if (onDismissRequest.invoke()) dialogViewModel.dismissDialog()
     }) {
         DialogContent()
