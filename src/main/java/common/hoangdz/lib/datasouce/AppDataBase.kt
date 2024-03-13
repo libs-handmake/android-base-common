@@ -13,9 +13,10 @@ abstract class AppDataBase : RoomDatabase() {
     companion object {
         inline fun <reified T : AppDataBase> newInstance(
             context: Context,
-            appDataBaseName: String
-        ) =
-            Room.databaseBuilder(context, T::class.java, appDataBaseName).build()
+            appDataBaseName: String,
+            onBuildDataBaseBuilder: Builder<T>.() -> Builder<T> = { this }
+        ) = Room.databaseBuilder(context, T::class.java, appDataBaseName).onBuildDataBaseBuilder()
+            .build()
     }
 
 }
