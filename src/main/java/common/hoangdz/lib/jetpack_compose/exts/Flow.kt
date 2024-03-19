@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun <T> StateFlow<T>.collectWhenResume() =
-    collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
+    this.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
 
 @Composable
 fun <T> Flow<T>.collectWhenResume(
