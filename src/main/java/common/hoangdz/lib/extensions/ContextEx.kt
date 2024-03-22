@@ -384,6 +384,12 @@ fun AppCompatActivity.createPermissionLauncher(
     else onDenied?.invoke()
 }
 
+fun Context.openGooglePlay() {
+    val intentUri = Uri.parse("https://play.google.com/store/account/subscriptions")
+    val intent = Intent(Intent.ACTION_VIEW, intentUri)
+    startActivity(intent)
+}
+
 fun Fragment.createPermissionLauncher(
     onDenied: (() -> Unit)? = null, onGrant: (() -> Unit)? = null
 ) = registerForActivityResult(ActivityResultContracts.RequestPermission()) {

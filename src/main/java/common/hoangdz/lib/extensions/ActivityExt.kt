@@ -1,6 +1,8 @@
 package common.hoangdz.lib.extensions
 
 import android.app.Activity
+import android.view.View
+import android.view.Window
 import androidx.core.view.WindowCompat
 
 enum class StatusBarColorMode {
@@ -34,4 +36,18 @@ fun Activity.configureStatusBarForFullscreenExperience() {/*    val window: Wind
         )
         WindowInsetsCompat.CONSUMED
     }*/
+}
+
+fun hideNavigationButton(window: Window) {
+    /*
+    * note:    add <item name="android:windowTranslucentStatus">true</item> to themes style
+    */
+    try {
+        val decorView = window.decorView
+        val uiOptions =
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        decorView.systemUiVisibility = uiOptions
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }
