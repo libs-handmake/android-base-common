@@ -20,12 +20,12 @@ import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 import common.hoangdz.lib.jetpack_compose.exts.collectWhenResume
 import common.hoangdz.lib.jetpack_compose.exts.toComposeDP
 import common.hoangdz.lib.viewmodels.BottomSheetViewModel
-import kotlinx.coroutines.Job
 
 @Composable
 fun ComposeBottomSheet(
     sheetViewModel: BottomSheetViewModel,
     modifier: Modifier = SafeModifier,
+    draggable: Boolean = true,
     scrollable: Boolean = true,
     sheetContent: @Composable () -> Unit
 ) {
@@ -47,18 +47,23 @@ fun ComposeBottomSheet(
             .offset(
                 y = height.toComposeDP() * (1f - sheetPg)
             )
-            .draggable(orientation = Orientation.Vertical, state = rememberDraggableState {
-                _dragAlpha = (_dragAlpha + it).coerceIn(0f..height * 1f)
-                val pg = 1f - _dragAlpha * 1f / height
-                sheetViewModel.animateTo(pg)
-            }, onDragStopped = {
-                val pg = _dragAlpha * 1f / height
-                if (pg < .5f) {
-                    sheetViewModel.expand()
-                } else {
-                    sheetViewModel.hide()
-                }
-            })
+            .run {
+                if (draggable) draggable(orientation = Orientation.Vertical,
+                    state = rememberDraggableState {
+                        _dragAlpha = (_dragAlpha + it).coerceIn(0f..height * 1f)
+                        val pg = 1f - _dragAlpha * 1f / height
+                        sheetViewModel.animateTo(pg)
+                    },
+                    onDragStopped = {
+                        val pg = _dragAlpha * 1f / height
+                        if (pg < .5f) {
+                            sheetViewModel.expand()
+                        } else {
+                            sheetViewModel.hide()
+                        }
+                    })
+                else this
+            }
             .then(modifier)
             .onGloballyPositioned {
                 height = it.size.height
