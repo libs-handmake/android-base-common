@@ -62,8 +62,10 @@ fun Navigation(
                             screenNavConfig = config
                         )
                     }
-                    Box(modifier = SafeModifier.fillMaxSize()) {
-                        foreground(config)
+                    CompositionLocalProvider(LocalScreenConfigs provides config) {
+                        Box(modifier = SafeModifier.fillMaxSize()) {
+                            foreground(config)
+                        }
                     }
                 }
             }
