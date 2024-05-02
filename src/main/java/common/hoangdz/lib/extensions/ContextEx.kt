@@ -258,10 +258,11 @@ fun View.dimenInt(@DimenRes dimen: Int) = resources.getDimensionPixelSize(dimen)
 val Context.layoutInflater: LayoutInflater
     get() = LayoutInflater.from(this)
 
-fun Context.linkAppStore() = "http://play.google.com/store/apps/details?id=${this.packageName}"
+fun Context.linkAppStore(packageName: String? = null) =
+    "http://play.google.com/store/apps/details?id=${packageName ?: this.packageName}"
 
-fun Context.goToAppStore() {
-    val uri: Uri = Uri.parse("market://details?id=${this.packageName}")
+fun Context.goToAppStore(packageName: String? = null) {
+    val uri: Uri = Uri.parse("market://details?id=${packageName ?: this.packageName}")
     val goToMarket = Intent(Intent.ACTION_VIEW, uri)
     goToMarket.addFlags(
         Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
@@ -271,7 +272,7 @@ fun Context.goToAppStore() {
     } catch (e: ActivityNotFoundException) {
         this.startActivity(
             Intent(
-                Intent.ACTION_VIEW, Uri.parse(linkAppStore())
+                Intent.ACTION_VIEW, Uri.parse(linkAppStore(packageName))
             )
         )
     }
