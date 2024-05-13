@@ -37,7 +37,9 @@ fun Navigation(
     }
 
     NavHost(
-        navController = navController, startDestination = screenNavigators.first().routePattern
+        modifier = modifier,
+        navController = navController,
+        startDestination = screenNavigators.first().routePattern
     ) {
         for (nav in screenNavigators) {
             composable(route = nav.routePattern, enterTransition = {
@@ -47,7 +49,7 @@ fun Navigation(
                     it.destination.route ?: return@composable, it.arguments
                 )
                 val activity = LocalContext.current.getActivity()
-                Box(modifier = modifier) {
+                Box {
                     Box(modifier = SafeModifier.fillMaxSize()) {
                         backGround(config)
                     }
