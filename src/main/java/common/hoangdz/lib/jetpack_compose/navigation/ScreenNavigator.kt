@@ -1,6 +1,5 @@
 package common.hoangdz.lib.jetpack_compose.navigation
 
-import android.app.Activity
 import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
@@ -22,7 +21,7 @@ data class ScreenConfigs(
         var navController: NavHostController? = null
     }
 
-    fun pop(activity: Activity?, navID: String? = null, inclusive: Boolean = true) {
+    fun pop(navID: String? = null, inclusive: Boolean = true) {
         if (navID.isNullOrEmpty()) navController?.popBackStack()
         else navController?.popBackStack(navID, inclusive)
     }
