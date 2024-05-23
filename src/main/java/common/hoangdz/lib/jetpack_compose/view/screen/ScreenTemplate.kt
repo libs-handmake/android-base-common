@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import common.hoangdz.lib.jetpack_compose.exts.SafeModifier
 
 @Composable
@@ -18,7 +19,7 @@ fun ScreenTemplate(
         Box(
             modifier = SafeModifier
                 .safeDrawingPadding()
-                .fillMaxWidth()
+                .fillMaxSize()
         ) {
             content()
         }
