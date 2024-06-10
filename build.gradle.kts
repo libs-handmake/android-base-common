@@ -22,8 +22,7 @@ android {
 
     libraryVariants.all {
         val variant = this
-        variant.outputs
-            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+        variant.outputs.map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
                 val outputFileName = "hoang_lib_common.aar"
                 output.outputFileName = outputFileName
@@ -34,14 +33,14 @@ android {
         dataBinding = true
         viewBinding = true
         compose = true
+        buildConfig = true
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
