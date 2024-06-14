@@ -2,6 +2,7 @@ package common.hoangdz.lib.utils.network
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.ConnectivityManager.NetworkCallback
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
@@ -15,17 +16,19 @@ class NetworkHelper(private val context: Context) {
         netWorkStateHolder.updateNetworkState(isConnected())
     }
 
+    private var networkCallback: NetworkCallback? = null
+
 
     init {
         updateState()
     }
 
     fun startNetworkCallback() {
-        val cm =
-            (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?)
-                ?: return
+        val cm = (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?)
+            ?: return
         val builder: NetworkRequest.Builder = NetworkRequest.Builder()
-        cm.registerNetworkCallback(builder.build(), object : ConnectivityManager.NetworkCallback() {
+        networkCallback?.let { cm.unregisterNetworkCallback(it) }
+        networkCallback = object : NetworkCallback() {
             override fun onAvailable(network: Network) {
                 updateState()
             }
@@ -33,7 +36,11 @@ class NetworkHelper(private val context: Context) {
             override fun onLost(network: Network) {
                 updateState()
             }
-        })
+        }.also {
+            cm.registerNetworkCallback(
+                builder.build(), it
+            )
+        }
     }
 
     private fun isConnected(): Boolean {
