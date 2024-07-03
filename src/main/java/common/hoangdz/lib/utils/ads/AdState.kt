@@ -6,4 +6,6 @@ object GlobalAdState {
 
     var isShowInterForNavigationLastTime = false
 
+    const val REWARD_LOADER_TIMEOUT = 10_000L
+
 }
