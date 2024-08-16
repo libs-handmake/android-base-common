@@ -22,6 +22,8 @@ abstract class ScreenNavConfig<T> {
 
     abstract val routePattern: String
 
+    val routeID get() = routePattern.replace("\\?(.*?)$".toRegex(), "")
+
     fun getArgumentPattern(): List<NamedNavArgument> {
         val pattern = "\\?(.+)".toRegex()
         val res = mutableListOf<NamedNavArgument>()
@@ -41,7 +43,7 @@ abstract class ScreenNavConfig<T> {
     open fun navigationInfo(data: T? = null): String = routePattern
 
     protected fun makeRealRoute(bundle: Bundle?): String {
-        var r = routePattern.replace("\\?(.*?)$".toRegex(), "")
+        var r = routeID
         bundle?.keySet()?.forEach {
             if (bundle.getString(it).isNullOrEmpty()) return@forEach
             r += if (r.contains("?")) "&"
