@@ -39,7 +39,7 @@ class PremiumHolder @Inject constructor(@ApplicationContext context: Context) :
     }
 
     val isPremium
-        get() = true//isLifetime || premiumDay > System.currentTimeMillis()
+        get() = isLifetime || premiumDay > System.currentTimeMillis()
 
     private val _premiumState by lazy { MutableStateFlow(isPremium) }
 
