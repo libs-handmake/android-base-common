@@ -7,6 +7,9 @@ plugins {
 
 android {
     namespace = "common.hoangdz.lib"
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
