@@ -490,6 +490,15 @@ fun Context.setLocaleSupport(c: String) {
     }
 }
 
+fun PackageManager.packageInstalled(packageName: String): Boolean {
+    try {
+        getPackageInfo(packageName, 0)
+        return true
+    } catch (e: PackageManager.NameNotFoundException) {
+        return false
+    }
+}
+
 fun Context.getActivity(): AppCompatActivity? = when (this) {
     is AppCompatActivity -> this
     is ContextWrapper -> baseContext.getActivity()
