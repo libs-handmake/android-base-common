@@ -44,7 +44,7 @@ fun Toolbar(
     color: Color = Color.Black,
     iconSize: Dp = 24.sdp,
     onBuildTitleStyle: @Composable (TextStyle) -> TextStyle = { it },
-    menuItems: MutableList<MenuItem> = mutableListOf()
+    menuItems: List<MenuItem> = listOf()
 ) {
     var sizeLeft by remember {
         mutableIntStateOf(0)
