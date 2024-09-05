@@ -13,3 +13,8 @@
 -keepnames @common.hoangdz.lib.utils.anotations.KeepNameR8 class *
 -keep class com.google.gson.reflect.TypeToken { *; }
 -keep class * extends com.google.gson.reflect.TypeToken
+
+# Keep rule for supporting LazyClassKey
+-keepclasseswithmembers,includedescriptorclasses class * {
+   @dagger.internal.KeepFieldType <fields>;
+}
