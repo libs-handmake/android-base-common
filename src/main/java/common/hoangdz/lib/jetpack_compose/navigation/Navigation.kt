@@ -9,7 +9,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -42,9 +42,9 @@ fun Navigation(
         startDestination = screenNavigators.first().routePattern
     ) {
         for (nav in screenNavigators) {
-            composable(route = nav.routePattern, enterTransition = {
+            composable(route = nav.routePattern, /*enterTransition = {
                 nav.enterTransition()
-            }, exitTransition = { nav.exitTransition() }, arguments = nav.getArgumentPattern()) {
+            }, exitTransition = { nav.exitTransition() },*/ arguments = nav.getArgumentPattern()) {
                 val config = ScreenConfigs(
                     it.destination.route ?: return@composable, it.arguments
                 )
