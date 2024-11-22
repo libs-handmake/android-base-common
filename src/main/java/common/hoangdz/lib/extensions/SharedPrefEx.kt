@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 
 fun SharedPreferences.getInt(key: String, defaultValue: Int = 0) = getInt(key, defaultValue)
 
+fun SharedPreferences.setInt(key: String, value: Int = 0) = edit().putInt(key, value).apply()
+
 fun SharedPreferences.setLong(key: String, value: Long) = edit().putLong(key, value).apply()
 
 fun SharedPreferences.getLong(key: String, defaultValue: Long = 0L) = getLong(key, defaultValue)

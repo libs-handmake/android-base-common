@@ -265,16 +265,16 @@ fun Context.goToAppStore(packageName: String? = null) {
     val uri: Uri = Uri.parse("market://details?id=${packageName ?: this.packageName}")
     val goToMarket = Intent(Intent.ACTION_VIEW, uri)
     goToMarket.addFlags(
-        Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+        Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
     )
     try {
         this.startActivity(goToMarket)
     } catch (e: ActivityNotFoundException) {
-        this.startActivity(
-            Intent(
-                Intent.ACTION_VIEW, Uri.parse(linkAppStore(packageName))
-            )
-        )
+        this.startActivity(Intent(
+            Intent.ACTION_VIEW, Uri.parse(linkAppStore(packageName))
+        ).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        })
     }
 }
 
